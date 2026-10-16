@@ -1,15 +1,26 @@
 const http = require('node:http');
 const { DatabaseSync } = require('node:sqlite');
 const path = require('node:path');
-
+const fs = require('node:fs');
 const db = new DatabaseSync(
   path.join(__dirname, 'character-chronicle.db')
 );
 
 const server = http.createServer((request, response) => {
 
+  if (request.url === '/' && request.method === 'GET') {
+    const page = fs.readFileSync(
+      path.join(__dirname, 'index.html'),
+      'utf8'
+    );
+
+    response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    response.end(page);
+    return;
+  }
+
   // POST: test receiving a request to add a character.
-    if (request.url === '/characters' && request.method === 'POST') {
+  if (request.url === '/characters' && request.method === 'POST') {
     let body = '';
 
     request.on('data', (chunk) => {
@@ -18,40 +29,52 @@ const server = http.createServer((request, response) => {
 
     request.on('end', () => {
       try {
-  const character = JSON.parse(body);
+        const character = JSON.parse(body);
 
-  if (
-    typeof character.name !== 'string' ||
-    character.name.trim() === '' ||
-    !Number.isInteger(character.level) ||
-    character.level < 1 ||
-    character.level > 20 ||
-    !Number.isInteger(character.max_hp) ||
-    character.max_hp < 1
-  ) {
-    response.writeHead(400, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify({
-      message: 'Provide a name, level from 1–20, and positive whole-number max_hp.'
-    }));
-    return;
-  }
+        if (
+          typeof character.name !== 'string' ||
+          character.name.trim() === '' ||
+          !Number.isInteger(character.level) ||
+          character.level < 1 ||
+          character.level > 20 ||
+          !Number.isInteger(character.max_hp) ||
+          character.max_hp < 1
+        ) {
+          response.writeHead(400, { 'Content-Type': 'application/json' });
+          response.end(JSON.stringify({
+            message: 'Provide a name, level from 1–20, and positive whole-number max_hp.'
+          }));
+          return;
+        }
 
-  db.prepare(`
+        db.prepare(`
     INSERT INTO characters (name, level, max_hp)
     VALUES (?, ?, ?)
   `).run(
-    character.name.trim(),
-    character.level,
-    character.max_hp
-  );
+          character.name.trim(),
+          character.level,
+          character.max_hp
+        );
 
-  console.log('Saved character:', character.name);
-} catch {
-  response.writeHead(400, { 'Content-Type': 'application/json' });
-  response.end(JSON.stringify({ message: 'Invalid JSON' }));
-  return;
-}
-      response.writeHead(200, { 'Content-Type': 'application/json' });
+        console.log('Saved character:', character.name);
+      } catch (error) {
+        console.error(error);
+
+        const invalidJson = error instanceof SyntaxError;
+
+        response.writeHead(invalidJson ? 400 : 500, {
+          'Content-Type': 'application/json'
+        });
+
+        response.end(JSON.stringify({
+          message: invalidJson
+            ? 'Invalid JSON'
+            : 'Could not save character'
+        }));
+
+        return;
+      }
+      response.writeHead(201, { 'Content-Type': 'application/json' });
       response.end(JSON.stringify({ message: 'Character saved' }));
     });
 
@@ -66,9 +89,8 @@ const server = http.createServer((request, response) => {
     return;
   }
 
-  // Other addresses show the welcome message.
-  response.writeHead(200, { 'Content-Type': 'text/plain' });
-  response.end('Character Chronicle server is running!');
+  response.writeHead(404, { 'Content-Type': 'text/plain' });
+  response.end('Page not found');
 });
 
 server.listen(3000, '127.0.0.1', () => {

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Character Chronicle</title>
+</head>
+
+<body>
+    <h1>Add a character</h1>
+
+    <form id="characterForm">
+        <p>
+            <label for="name">Character name</label>
+            <input id="name" name="name" type="text" required>
+        </p>
+
+        <p>
+            <label for="level">Level</label>
+            <input id="level" name="level" type="number" min="1" max="20" value="1" required>
+        </p>
+
+        <p>
+            <label for="maxHp">Maximum HP</label>
+            <input id="maxHp" name="max_hp" type="number" min="1" value="10" required>
+        </p>
+
+        <button type="submit">Save character</button>
+    </form>
+
+    <p id="message" role="status"></p>
+    <h2>Saved characters</h2>
+    <ul id="characterList"></ul>
+    <script>
+        const form = document.getElementById('characterForm');
+        const message = document.getElementById('message');
+        const characterList = document.getElementById('characterList');
+
+        async function loadCharacters() {
+            try {
+                const response = await fetch('/characters');
+
+                if (!response.ok) {
+                    throw new Error('Could not load characters');
+                }
+
+                const characters = await response.json();
+
+                characterList.replaceChildren();
+
+                for (const character of characters) {
+                    const item = document.createElement('li');
+
+                    item.textContent =
+                        `${character.name} — Level ${character.level} — Max HP ${character.max_hp}`;
+
+                    characterList.appendChild(item);
+                }
+            } catch {
+                message.textContent = 'Could not load saved characters.';
+            }
+        }
+
+        loadCharacters();
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const saveButton = form.querySelector('button[type="submit"]');
+            saveButton.disabled = true;
+
+            const character = {
+                name: form.elements.namedItem('name').value,
+                level: Number(form.elements.namedItem('level').value),
+                max_hp: Number(form.elements.namedItem('max_hp').value)
+            };
+
+            try {
+                const response = await fetch('/characters', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(character)
+                });
+
+                const result = await response.json();
+                message.textContent = result.message;
+                if (response.ok) {
+                    form.reset();
+                    await loadCharacters();
+                }
+            } catch {
+                message.textContent = 'Could not reach the server. Please try again.';
+            } finally {
+                saveButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
