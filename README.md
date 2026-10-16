@@ -7,6 +7,7 @@ This repository contains the early server prototype. The existing [Character Chr
 ## Current functionality
 
 - Runs a local HTTP server using Node.js.
+- Serves a browser form for adding characters, with a saved-character list that refreshes after successful saves.
 - Stores characters persistently in SQLite.
 - Lists characters through `GET /characters`.
 - Accepts JSON through `POST /characters`, validates basic fields, and saves a character.
@@ -86,7 +87,7 @@ Refresh the characters page to see the new row. **Each successful POST creates a
 | `level` | Integer from 1 to 20 |
 | `max_hp` | Positive integer |
 
-Missing or invalid fields return HTTP 400. Successful reads and inserts currently return HTTP 200.
+Missing or invalid fields return HTTP 400. Successful reads return HTTP 200; inserts return HTTP 201 Created.
 
 ## Database structure
 
@@ -108,6 +109,7 @@ SQLite assigns an ID when a row is inserted without one. This is a starter schem
 | File | Purpose |
 | --- | --- |
 | `server.js` | HTTP request handling, validation, and character reads/inserts |
+| `index.html` | Character form, POST submission, and automatically refreshed saved-character list |
 | `database.js` | Database initialization and a query showing existing rows |
 | `package.json` | Project metadata |
 | `.gitignore` | Excludes dependencies, local databases, secrets, and logs |
@@ -118,13 +120,12 @@ The database is created locally and is not included in this repository. GitHub h
 
 This is a **local learning prototype**, not a production-ready service. It listens only on `127.0.0.1:3000` on the host computer.
 
-Currently there is no authentication, per-player access control, cross-device syncing, update/delete endpoint, request-body size limit, or automated test suite. Unknown routes return the welcome message. Database errors in the POST handler currently share the invalid-JSON response; error handling will be refined as the server develops.
+Currently there is no authentication, per-player access control, cross-device syncing, update/delete endpoint, request-body size limit, or automated test suite. Unknown routes return HTTP 404. Malformed JSON returns HTTP 400; other POST exceptions return HTTP 500. Further error handling will be refined as the server develops.
 
 Keep the database outside folders actively synced by services such as OneDrive. For a simple manual backup, stop the server before copying the database file.
 
 ## Planned next steps
 
-- Build a browser form for adding characters.
 - Improve request handling and error responses.
 - Add meaningful automated API tests.
 - Expand the SQL schema for complete character data.
@@ -136,3 +137,4 @@ Keep the database outside folders actively synced by services such as OneDrive. 
 ## Learning focus
 
 Built step by step to practice JavaScript, HTTP methods, JSON, SQL table design, parameterized queries, persistence, debugging, and version control.
+
