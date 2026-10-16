@@ -1,0 +1,18 @@
+# Installed dependencies
+node_modules/
+
+# Local databases and their working files
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
