@@ -18,7 +18,66 @@ const server = http.createServer((request, response) => {
     response.end(page);
     return;
   }
+  const characterMatch = request.url.match(/^\/characters\/([1-9]\d*)$/);
 
+  if (characterMatch && request.method === 'PATCH') {
+    const characterId = Number(characterMatch[1]);
+    const character = db.prepare(
+      'SELECT * FROM characters WHERE id = ?'
+    ).get(characterId);
+
+    if (!character) {
+      response.writeHead(404, { 'Content-Type': 'application/json' });
+      response.end(JSON.stringify({
+        message: 'Character not found'
+      }));
+      return;
+    }
+    let body = '';
+
+    request.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    request.on('end', () => {
+      try {
+        const updates = JSON.parse(body);
+
+        if (
+          !Number.isInteger(updates.level) ||
+          updates.level < 1 ||
+          updates.level > 20
+        ) {
+          response.writeHead(400, {
+            'Content-Type': 'application/json'
+          });
+          response.end(JSON.stringify({
+            message: 'Level must be a whole number from 1–20'
+          }));
+          return;
+        }
+
+        db.prepare(
+          'UPDATE characters SET level = ? WHERE id = ?'
+        ).run(updates.level, characterId);
+        response.writeHead(200, {
+          'Content-Type': 'application/json'
+        });
+        response.end(JSON.stringify({
+          message: 'Character level updated'
+        }));
+      } catch {
+        response.writeHead(400, {
+          'Content-Type': 'application/json'
+        });
+        response.end(JSON.stringify({
+          message: 'Invalid update information'
+        }));
+      }
+    });
+
+    return;
+  }
   // POST: test receiving a request to add a character.
   if (request.url === '/characters' && request.method === 'POST') {
     let body = '';

@@ -2,16 +2,44 @@
 
 A learning project for a self-hosted backend for **Character Chronicle**, a D&D character-management app with character sheets, a spellbook, combat resources, and story notes.
 
-This repository contains the early server prototype. The existing [Character Chronicle frontend](https://github.com/Carl-Ackerly/combat-tracker) is a separate project and is **not connected to this server yet**.
+This repository contains a learning server and an isolated, working full-app integration prototype. A snapshot of the existing [Character Chronicle frontend](https://github.com/Carl-Ackerly/combat-tracker) connects to SQLite locally on port 3001. The public GitHub Pages app remains separate and unchanged.
 
-## Current functionality
+## Full-app integration prototype
+
+Run:
+
+```powershell
+node app-server.js
+```
+
+Open http://127.0.0.1:3001. Create a separate test character and select **Connect test saves**. The existing character sheet, spellbook, notes, and battle dashboard save the complete book locally first, then upload it to a separate SQLite database. In a fresh browser session, select **Load server copy** to retrieve it. Downloading newer changes is manual; this is not yet multi-user cloud syncing.
+
+- Full nested JSON is preserved, including custom fields and saved sessions.
+- Revision checks reject stale writes rather than silently overwriting a newer copy.
+- Pending changes remain local during connection failures.
+- No login, remote access, or public deployment is implemented.
+- No real character records, databases, or backup exports are included in Git.
+
+See [INTEGRATION.md](INTEGRATION.md) for architecture, limitations, and isolated test instructions. The `app-preview/` snapshot comes from the existing frontend; it is not a second independently designed UI.
+
+## Two server modes
+
+| Command | Address | Purpose |
+| --- | --- | --- |
+| `node server.js` | http://127.0.0.1:3000 | Original learning form and GET/POST/PATCH character routes |
+| `node app-server.js` | http://127.0.0.1:3001 | Existing full app connected to a separate test-book database |
+
+Both bind to loopback only and use different database files. Stop a foreground server with Ctrl+C.
+
+## Learning server functionality
 
 - Runs a local HTTP server using Node.js.
 - Serves a browser form for adding characters, with a saved-character list that refreshes after successful saves.
 - Stores characters persistently in SQLite.
 - Lists characters through `GET /characters`.
 - Accepts JSON through `POST /characters`, validates basic fields, and saves a character.
-- Uses parameterized SQL for inserts.
+- Updates a character level through `PATCH /characters/:id`, with existence and level checks.
+- Uses parameterized SQL for inserts and updates.
 - Keeps local databases and environment files out of Git through `.gitignore`.
 
 ## Technology
@@ -22,7 +50,7 @@ This repository contains the early server prototype. The existing [Character Chr
 - PowerShell for testing requests
 - Git and GitHub for version control
 
-## Getting started
+## Getting started with the learning server
 
 Use **Node.js 24 LTS**. The project currently has no external dependencies, so no `npm install` step is needed. Node may print an experimental warning for its SQLite module.
 
@@ -120,7 +148,7 @@ The database is created locally and is not included in this repository. GitHub h
 
 This is a **local learning prototype**, not a production-ready service. It listens only on `127.0.0.1:3000` on the host computer.
 
-Currently there is no authentication, per-player access control, cross-device syncing, update/delete endpoint, request-body size limit, or automated test suite. Unknown routes return HTTP 404. Malformed JSON returns HTTP 400; other POST exceptions return HTTP 500. Further error handling will be refined as the server develops.
+The learning server has no authentication, per-player access control, cross-device syncing, delete endpoint, request-body size limit, or automated test suite of its own. The full-app prototype has separate isolated integration tests. Unknown routes return HTTP 404. Malformed JSON returns HTTP 400; other POST exceptions return HTTP 500. Further error handling will be refined as the server develops.
 
 Keep the database outside folders actively synced by services such as OneDrive. For a simple manual backup, stop the server before copying the database file.
 
@@ -130,7 +158,7 @@ Keep the database outside folders actively synced by services such as OneDrive. 
 - Add meaningful automated API tests.
 - Expand the SQL schema for complete character data.
 - Add private player accounts and access controls.
-- Connect the existing frontend.
+- Refine the existing frontend connection beyond the isolated prototype.
 - Implement offline-aware cross-device synchronization and conflict handling.
 - Explore private remote access and Docker deployment.
 
@@ -138,3 +166,7 @@ Keep the database outside folders actively synced by services such as OneDrive. 
 
 Built step by step to practice JavaScript, HTTP methods, JSON, SQL table design, parameterized queries, persistence, debugging, and version control.
 
+
+## Verified checkpoint — October 16, 2026
+
+Manual testing confirmed that a synthetic multiclass Fighter/Wizard character, level changes, spent Second Wind uses, notes/story entries, spellbook selections, and dashboard changes reload in a separate incognito browser via Load server copy. Automated checks cover SQLite restart persistence, nested JSON preservation, invalid requests, stale-revision rejection, local saves during outages, reconnection, asset restrictions, and responsive widths.

@@ -1,0 +1,244 @@
+html[data-theme=ember]{color-scheme:dark;--bg:#100f10;--surface:#242124;--surface2:#30282a;--line:#948b80;--text:#f1ece4;--muted:#bbb1a5;--accent:#ebad83;--dark:#181516;--red:#ef9990;--blue:#ebad83;--radius:7px}
+html[data-theme=ember] body{background-color:#030b20;background-image:radial-gradient(circle at 14% 17%,#e6f5ff99 0 1px,transparent 2px),radial-gradient(circle at 75% 40%,#8aceff88 0 1px,transparent 2px),radial-gradient(circle at 38% 80%,#e6f5ff55 0 1px,transparent 2px),radial-gradient(ellipse at 85% 5%,#194d9a99,transparent 55%),radial-gradient(ellipse at 0% 80%,#103a7599,transparent 60%);background-size:163px 193px,239px 307px,311px 223px,100% 100%,100% 100%;background-attachment:fixed;color:var(--text)}
+html[data-theme=ember] h1,html[data-theme=ember] h2,html[data-theme=ember] h3{color:#eee2d2;text-shadow:0 2px 4px #0008}
+html[data-theme=ember] .character-book,html[data-theme=ember] .paper-sheet,html[data-theme=ember] .grimoire,html[data-theme=ember] .story-book,html[data-theme=ember] .health-card,html[data-theme=ember] .rest-card,html[data-theme=ember] .group,html[data-theme=ember] .panel,html[data-theme=ember] .session-panel,html[data-theme=ember] dialog{background:linear-gradient(135deg,#2a2426fa,#141214fa);border:3px double #a69a8a;border-radius:8px;box-shadow:inset 0 0 0 1px #403734,0 6px 24px #0006;color:var(--text)}
+html[data-theme=ember] button{background:linear-gradient(#443537,#241c20);border:1px solid #948778;color:#f7eee3;border-radius:5px;box-shadow:inset 0 0 0 2px #403332,0 2px 4px #0004}
+html[data-theme=ember] button:hover:not(:disabled){background:linear-gradient(#634136,#38241e);border-color:#fff0d7;box-shadow:0 0 10px #ef703344}
+html[data-theme=ember] button.primary{background:linear-gradient(#843d30,#46251e);color:white;border-color:#bf8c6d}
+html[data-theme=ember] .text-button,html[data-theme=ember] .ability-name,html[data-theme=ember] .small-help{background:transparent;box-shadow:none;color:var(--text)}
+html[data-theme=ember] .book-nav{border-bottom:3px double #70675e;padding-bottom:14px;gap:8px}
+html[data-theme=ember] .book-nav button:focus-visible::before{content:'☞ ';color:white}
+html[data-theme=ember] .contents-entries>button{background:linear-gradient(100deg,#30282bbb,#151315bb);color:var(--text);border-color:#6f6258;box-shadow:none}
+html[data-theme=ember] .chapter-number,html[data-theme=ember] .chapter-arrow,html[data-theme=ember] .book-flourish{color:#ddb18c}
+html[data-theme=ember] input,html[data-theme=ember] select,html[data-theme=ember] textarea,html[data-theme=ember] .paper-sheet input,html[data-theme=ember] .paper-sheet select,html[data-theme=ember] .paper-sheet textarea{background:#171416;color:var(--text);border:1px solid #665b53;border-radius:4px}
+html[data-theme=ember] input[readonly],html[data-theme=ember] .paper-sheet input[readonly]{background:#272024!important;color:#f3e5d2}
+html[data-theme=ember] input::placeholder,html[data-theme=ember] textarea::placeholder{color:#a69c92;opacity:1}
+html[data-theme=ember] input[type=checkbox]{accent-color:#d87946}
+html[data-theme=ember] .resource,html[data-theme=ember] .paper-box,html[data-theme=ember] .paper-ability,html[data-theme=ember] .paper-modifier,html[data-theme=ember] .grimoire-level,html[data-theme=ember] .origin-feat,html[data-theme=ember] .class-choice,html[data-theme=ember] .stored-feat,html[data-theme=ember] .stored-special{background:#252023cc;border-color:#78695d;color:var(--text)}
+html[data-theme=ember] .paper-box>h2,html[data-theme=ember] .paper-ability h2,html[data-theme=ember] .paper-field>span,html[data-theme=ember] .paper-legend,html[data-theme=ember] .paper-attacks-head,html[data-theme=ember] .feature-reference summary,html[data-theme=ember] .paper-ability h2 .save-marker,html[data-theme=ember] .hp-value{color:#eee2d2}
+html[data-theme=ember] .paper-heading,html[data-theme=ember] .paper-character,html[data-theme=ember] .group-heading,html[data-theme=ember] .class-choice,html[data-theme=ember] .story-heading,html[data-theme=ember] .story-entry,html[data-theme=ember] .grimoire-heading,html[data-theme=ember] .grimoire-title,html[data-theme=ember] .grimoire-spell{border-color:#63574e}
+html[data-theme=ember] .meter{background:#100d0e;border:1px solid #8c7567;border-radius:4px;overflow:hidden}
+html[data-theme=ember] .meter>div{background:linear-gradient(#c75b44,#742a25);box-shadow:0 0 8px #e2664455}
+html[data-theme=ember] #takeDamage{background:linear-gradient(#7e2949,#4a1830);color:#fff1f1;border-color:#e8a2ad}
+html[data-theme=ember] #applyHealing{background:linear-gradient(#236b4a,#103d2b);color:#effff4;border-color:#9ed4b7}
+html[data-theme=ember] .use-label{background:#211a1c;border-color:#9e8975;color:white}
+html[data-theme=ember] .use-label:has(input:checked){background:linear-gradient(#7b4230,#452820);border-color:#e4b58d;box-shadow:0 0 6px #d8794644}
+html[data-theme=ember] .grimoire-blank,html[data-theme=ember] .grimoire-lines,html[data-theme=ember] .spell-level-number,html[data-theme=ember] .grimoire-level>header{background:transparent;border-color:#63574e;color:#eee2d2}
+html[data-theme=ember] .story-prose{color:#e5d8c7}
+html[data-theme=ember] .story-prose:first-letter{color:#e0a476}
+html[data-theme=ember] #abilityHelp,html[data-theme=ember] #toast{background:#282022;color:#f3e8dc;border:2px double #9e8975}
+html[data-theme=ember] .character-book .book-title::before{content:'◆';display:block;color:#b8e9ff;font-size:30px;text-shadow:0 0 14px #5cafff;margin-bottom:10px}
+html[data-theme=ember] .dashboard-main .resource-list{background:#201b1e;box-shadow:none;border-color:#69594f}
+html[data-theme=ember] .dashboard-main .resource{background:#252024;border-bottom-color:#4c3d37}
+html[data-theme=ember] .dashboard-main .inspiration-resource{margin-bottom:0}
+html[data-theme=ember] .dashboard-main .ability-name,html[data-theme=ember] .dashboard-main .ability-name:hover:not(:disabled){border:0;outline-offset:4px;background:transparent;box-shadow:none;filter:none}
+html[data-theme=ember] .dashboard-main .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=ember] .dashboard-main .use-label:has(input:checked){background:transparent;border:0;box-shadow:none}
+html[data-theme=ember] body{background-color:#100e10;background-image:radial-gradient(ellipse at 90% 0%,#7d32252b,transparent 55%),radial-gradient(ellipse at 5% 90%,#ac512012,transparent 60%),repeating-linear-gradient(115deg,#ffffff02 0 1px,transparent 1px 7px);background-size:auto;background-attachment:fixed}
+html[data-theme=ember] .character-book,html[data-theme=ember] .paper-sheet,html[data-theme=ember] .grimoire,html[data-theme=ember] .story-book,html[data-theme=ember] .health-card,html[data-theme=ember] .rest-card,html[data-theme=ember] .group,html[data-theme=ember] .panel,html[data-theme=ember] dialog{background:linear-gradient(135deg,#2a2426fa,#141214fa);border:3px double #8b8075;border-radius:3px;box-shadow:inset 0 0 0 1px #37302b,0 8px 30px #0007}
+html[data-theme=ember] .character-book .book-title::before{content:"◆";color:#d39875;font-size:27px;text-shadow:0 0 18px #d15d3555}
+html[data-theme=ember] .use-label input[type=checkbox]{appearance:none;width:15px;height:15px;min-height:0;padding:0;transform:rotate(45deg);border:1px solid #e7b98a;background:#d88b52;box-shadow:0 0 6px #ed8b4444;cursor:pointer}html[data-theme=ember] .use-label input[type=checkbox]:checked{background:#322a29;border-color:#6d6058;box-shadow:none}html[data-theme=ember] .use-label input[type=checkbox]:focus-visible{outline:2px solid #ffdbb6;outline-offset:3px}
+html[data-theme=ember] .book-nav button:focus-visible::before{content:"◆ ";color:#e7aa76}
+
+
+
+/* Local comparison themes */
+html[data-theme=frost]{color-scheme:dark;--bg:#0c141c;--surface:#1e303f;--surface2:#2c4050;--line:#8caaba;--text:#edf7fc;--muted:#b0c6d1;--accent:#b7e6f5;--dark:#101e28;--red:#ef9990;--blue:#b7e6f5;--radius:7px}
+html[data-theme=frost] body{background-color:#030b20;background-image:radial-gradient(circle at 14% 17%,#e6f5ff99 0 1px,transparent 2px),radial-gradient(circle at 75% 40%,#8aceff88 0 1px,transparent 2px),radial-gradient(circle at 38% 80%,#e6f5ff55 0 1px,transparent 2px),radial-gradient(ellipse at 85% 5%,#194d9a99,transparent 55%),radial-gradient(ellipse at 0% 80%,#103a7599,transparent 60%);background-size:163px 193px,239px 307px,311px 223px,100% 100%,100% 100%;background-attachment:fixed;color:var(--text)}
+html[data-theme=frost] h1,html[data-theme=frost] h2,html[data-theme=frost] h3{color:#dceef6;text-shadow:0 2px 4px #0008}
+html[data-theme=frost] .character-book,html[data-theme=frost] .paper-sheet,html[data-theme=frost] .grimoire,html[data-theme=frost] .story-book,html[data-theme=frost] .health-card,html[data-theme=frost] .rest-card,html[data-theme=frost] .group,html[data-theme=frost] .panel,html[data-theme=frost] .session-panel,html[data-theme=frost] dialog{background:linear-gradient(135deg,#273c4bfa,#111d28fa);border:3px double #acc6d2;border-radius:8px;box-shadow:inset 0 0 0 1px #344e5d,0 6px 24px #0006;color:var(--text)}
+html[data-theme=frost] button{background:linear-gradient(#365363,#1d303f);border:1px solid #91b7c8;color:#edf8ff;border-radius:5px;box-shadow:inset 0 0 0 2px #314b59,0 2px 4px #0004}
+html[data-theme=frost] button:hover:not(:disabled){background:linear-gradient(#42677d,#294557);border-color:#f0fbff;box-shadow:0 0 10px #a5e7ff44}
+html[data-theme=frost] button.primary{background:linear-gradient(#34697d,#214653);color:white;border-color:#a9d7e8}
+html[data-theme=frost] .text-button,html[data-theme=frost] .ability-name,html[data-theme=frost] .small-help{background:transparent;box-shadow:none;color:var(--text)}
+html[data-theme=frost] .book-nav{border-bottom:3px double #809eac;padding-bottom:14px;gap:8px}
+html[data-theme=frost] .book-nav button:focus-visible::before{content:'☞ ';color:white}
+html[data-theme=frost] .contents-entries>button{background:linear-gradient(100deg,#304c60bb,#111f2bbb);color:var(--text);border-color:#7195a8;box-shadow:none}
+html[data-theme=frost] .chapter-number,html[data-theme=frost] .chapter-arrow,html[data-theme=frost] .book-flourish{color:#bdeaff}
+html[data-theme=frost] input,html[data-theme=frost] select,html[data-theme=frost] textarea,html[data-theme=frost] .paper-sheet input,html[data-theme=frost] .paper-sheet select,html[data-theme=frost] .paper-sheet textarea{background:#111f2a;color:var(--text);border:1px solid #5a7b8c;border-radius:4px}
+html[data-theme=frost] input[readonly],html[data-theme=frost] .paper-sheet input[readonly]{background:#243947!important;color:#edf8fc}
+html[data-theme=frost] input::placeholder,html[data-theme=frost] textarea::placeholder{color:#a7bdc9;opacity:1}
+html[data-theme=frost] input[type=checkbox]{accent-color:#9bdaef}
+html[data-theme=frost] .resource,html[data-theme=frost] .paper-box,html[data-theme=frost] .paper-ability,html[data-theme=frost] .paper-modifier,html[data-theme=frost] .grimoire-level,html[data-theme=frost] .origin-feat,html[data-theme=frost] .class-choice,html[data-theme=frost] .stored-feat,html[data-theme=frost] .stored-special{background:#213643cc;border-color:#7695a5;color:var(--text)}
+html[data-theme=frost] .paper-box>h2,html[data-theme=frost] .paper-ability h2,html[data-theme=frost] .paper-field>span,html[data-theme=frost] .paper-legend,html[data-theme=frost] .paper-attacks-head,html[data-theme=frost] .feature-reference summary,html[data-theme=frost] .paper-ability h2 .save-marker,html[data-theme=frost] .hp-value{color:#dceef6}
+html[data-theme=frost] .paper-heading,html[data-theme=frost] .paper-character,html[data-theme=frost] .group-heading,html[data-theme=frost] .class-choice,html[data-theme=frost] .story-heading,html[data-theme=frost] .story-entry,html[data-theme=frost] .grimoire-heading,html[data-theme=frost] .grimoire-title,html[data-theme=frost] .grimoire-spell{border-color:#557587}
+html[data-theme=frost] .meter{background:#0b1720;border:1px solid #8aaebb;border-radius:4px;overflow:hidden}
+html[data-theme=frost] .meter>div{background:linear-gradient(#99deeb,#397d99);box-shadow:0 0 8px #8ddfff55}
+html[data-theme=frost] #takeDamage{background:linear-gradient(#7e2949,#4a1830);color:#fff1f1;border-color:#e8a2ad}
+html[data-theme=frost] #applyHealing{background:linear-gradient(#236b4a,#103d2b);color:#effff4;border-color:#9ed4b7}
+html[data-theme=frost] .use-label{background:#182c38;border-color:#8baebb;color:white}
+html[data-theme=frost] .use-label:has(input:checked){background:linear-gradient(#3f6b80,#244457);border-color:#b5e8f6;box-shadow:0 0 6px #94dfff44}
+html[data-theme=frost] .grimoire-blank,html[data-theme=frost] .grimoire-lines,html[data-theme=frost] .spell-level-number,html[data-theme=frost] .grimoire-level>header{background:transparent;border-color:#557587;color:#dceef6}
+html[data-theme=frost] .story-prose{color:#d4e8f1}
+html[data-theme=frost] .story-prose:first-letter{color:#a9e1f4}
+html[data-theme=frost] #abilityHelp,html[data-theme=frost] #toast{background:#213744;color:#edf7fc;border:2px double #8baebb}
+html[data-theme=frost] .character-book .book-title::before{content:'◆';display:block;color:#b8e9ff;font-size:30px;text-shadow:0 0 14px #5cafff;margin-bottom:10px}
+html[data-theme=frost] .dashboard-main .resource-list{background:#1a2d39;box-shadow:none;border-color:#5d8193}
+html[data-theme=frost] .dashboard-main .resource{background:#203441;border-bottom-color:#365262}
+html[data-theme=frost] .dashboard-main .inspiration-resource{margin-bottom:0}
+html[data-theme=frost] .dashboard-main .ability-name,html[data-theme=frost] .dashboard-main .ability-name:hover:not(:disabled){border:0;outline-offset:4px;background:transparent;box-shadow:none;filter:none}
+html[data-theme=frost] .dashboard-main .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=frost] .dashboard-main .use-label:has(input:checked){background:transparent;border:0;box-shadow:none}
+html[data-theme=frost] body{background-color:#0b141d;background-image:radial-gradient(ellipse at 90% 0%,#68b9db22,transparent 55%),radial-gradient(ellipse at 5% 90%,#9dd6e51a,transparent 60%),repeating-linear-gradient(115deg,#ffffff02 0 1px,transparent 1px 7px);background-size:auto;background-attachment:fixed}
+html[data-theme=frost] .character-book,html[data-theme=frost] .paper-sheet,html[data-theme=frost] .grimoire,html[data-theme=frost] .story-book,html[data-theme=frost] .health-card,html[data-theme=frost] .rest-card,html[data-theme=frost] .group,html[data-theme=frost] .panel,html[data-theme=frost] dialog{background:linear-gradient(135deg,#273c4bfa,#111d28fa);border:3px double #9bb7c6;border-radius:3px;box-shadow:inset 0 0 0 1px #314c5b,0 8px 30px #0007}
+html[data-theme=frost] .character-book .book-title::before{content:"◆";color:#c3efff;font-size:27px;text-shadow:0 0 18px #8edfff55}
+html[data-theme=frost] .use-label input[type=checkbox]{appearance:none;width:15px;height:15px;min-height:0;padding:0;transform:rotate(45deg);border:1px solid #c5e9f4;background:#9dd9eb;box-shadow:0 0 6px #b5edff44;cursor:pointer}html[data-theme=frost] .use-label input[type=checkbox]:checked{background:#293b46;border-color:#557383;box-shadow:none}html[data-theme=frost] .use-label input[type=checkbox]:focus-visible{outline:2px solid #d9f5ff;outline-offset:3px}
+html[data-theme=frost] .book-nav button:focus-visible::before{content:"◆ ";color:#bce8fc}
+
+
+
+html[data-theme=frost] .character-book .book-title::before{content:'❄';font-size:32px}
+html[data-theme=royal]{color-scheme:dark;--bg:#170f21;--surface:#30213d;--surface2:#42304e;--line:#b89e64;--text:#f5ebd8;--muted:#ccbda8;--accent:#e9cd8c;--dark:#201429;--red:#ef9990;--blue:#e9cd8c;--radius:7px}
+html[data-theme=royal] body{background-color:#030b20;background-image:radial-gradient(circle at 14% 17%,#e6f5ff99 0 1px,transparent 2px),radial-gradient(circle at 75% 40%,#8aceff88 0 1px,transparent 2px),radial-gradient(circle at 38% 80%,#e6f5ff55 0 1px,transparent 2px),radial-gradient(ellipse at 85% 5%,#194d9a99,transparent 55%),radial-gradient(ellipse at 0% 80%,#103a7599,transparent 60%);background-size:163px 193px,239px 307px,311px 223px,100% 100%,100% 100%;background-attachment:fixed;color:var(--text)}
+html[data-theme=royal] h1,html[data-theme=royal] h2,html[data-theme=royal] h3{color:#f1dbab;text-shadow:0 2px 4px #0008}
+html[data-theme=royal] .character-book,html[data-theme=royal] .paper-sheet,html[data-theme=royal] .grimoire,html[data-theme=royal] .story-book,html[data-theme=royal] .health-card,html[data-theme=royal] .rest-card,html[data-theme=royal] .group,html[data-theme=royal] .panel,html[data-theme=royal] .session-panel,html[data-theme=royal] dialog{background:linear-gradient(135deg,#392742fa,#1c1226fa);border:3px double #c8ad71;border-radius:8px;box-shadow:inset 0 0 0 1px #344e5d,0 6px 24px #0006;color:var(--text)}
+html[data-theme=royal] button{background:linear-gradient(#50385e,#2d1d3a);border:1px solid #bba16b;color:#edf8ff;border-radius:5px;box-shadow:inset 0 0 0 2px #314b59,0 2px 4px #0004}
+html[data-theme=royal] button:hover:not(:disabled){background:linear-gradient(#42677d,#294557);border-color:#f0fbff;box-shadow:0 0 10px #a5e7ff44}
+html[data-theme=royal] button.primary{background:linear-gradient(#755188,#412c55);color:white;border-color:#dfc582}
+html[data-theme=royal] .text-button,html[data-theme=royal] .ability-name,html[data-theme=royal] .small-help{background:transparent;box-shadow:none;color:var(--text)}
+html[data-theme=royal] .book-nav{border-bottom:3px double #809eac;padding-bottom:14px;gap:8px}
+html[data-theme=royal] .book-nav button:focus-visible::before{content:'☞ ';color:white}
+html[data-theme=royal] .contents-entries>button{background:linear-gradient(100deg,#4a3259bb,#23172fbb);color:var(--text);border-color:#7195a8;box-shadow:none}
+html[data-theme=royal] .chapter-number,html[data-theme=royal] .chapter-arrow,html[data-theme=royal] .book-flourish{color:#e4c681}
+html[data-theme=royal] input,html[data-theme=royal] select,html[data-theme=royal] textarea,html[data-theme=royal] .paper-sheet input,html[data-theme=royal] .paper-sheet select,html[data-theme=royal] .paper-sheet textarea{background:#21162c;color:var(--text);border:1px solid #5a7b8c;border-radius:4px}
+html[data-theme=royal] input[readonly],html[data-theme=royal] .paper-sheet input[readonly]{background:#392748!important;color:#edf8fc}
+html[data-theme=royal] input::placeholder,html[data-theme=royal] textarea::placeholder{color:#a7bdc9;opacity:1}
+html[data-theme=royal] input[type=checkbox]{accent-color:#9bdaef}
+html[data-theme=royal] .resource,html[data-theme=royal] .paper-box,html[data-theme=royal] .paper-ability,html[data-theme=royal] .paper-modifier,html[data-theme=royal] .grimoire-level,html[data-theme=royal] .origin-feat,html[data-theme=royal] .class-choice,html[data-theme=royal] .stored-feat,html[data-theme=royal] .stored-special{background:#33223fcc;border-color:#7695a5;color:var(--text)}
+html[data-theme=royal] .paper-box>h2,html[data-theme=royal] .paper-ability h2,html[data-theme=royal] .paper-field>span,html[data-theme=royal] .paper-legend,html[data-theme=royal] .paper-attacks-head,html[data-theme=royal] .feature-reference summary,html[data-theme=royal] .paper-ability h2 .save-marker,html[data-theme=royal] .hp-value{color:#f1dbab}
+html[data-theme=royal] .paper-heading,html[data-theme=royal] .paper-character,html[data-theme=royal] .group-heading,html[data-theme=royal] .class-choice,html[data-theme=royal] .story-heading,html[data-theme=royal] .story-entry,html[data-theme=royal] .grimoire-heading,html[data-theme=royal] .grimoire-title,html[data-theme=royal] .grimoire-spell{border-color:#557587}
+html[data-theme=royal] .meter{background:#0b1720;border:1px solid #8aaebb;border-radius:4px;overflow:hidden}
+html[data-theme=royal] .meter>div{background:linear-gradient(#b48dcc,#68447e);box-shadow:0 0 8px #8ddfff55}
+html[data-theme=royal] #takeDamage{background:linear-gradient(#7e2949,#4a1830);color:#fff1f1;border-color:#e8a2ad}
+html[data-theme=royal] #applyHealing{background:linear-gradient(#236b4a,#103d2b);color:#effff4;border-color:#9ed4b7}
+html[data-theme=royal] .use-label{background:#182c38;border-color:#8baebb;color:white}
+html[data-theme=royal] .use-label:has(input:checked){background:linear-gradient(#3f6b80,#244457);border-color:#b5e8f6;box-shadow:0 0 6px #94dfff44}
+html[data-theme=royal] .grimoire-blank,html[data-theme=royal] .grimoire-lines,html[data-theme=royal] .spell-level-number,html[data-theme=royal] .grimoire-level>header{background:transparent;border-color:#557587;color:#f1dbab}
+html[data-theme=royal] .story-prose{color:#d4e8f1}
+html[data-theme=royal] .story-prose:first-letter{color:#a9e1f4}
+html[data-theme=royal] #abilityHelp,html[data-theme=royal] #toast{background:#213744;color:#edf7fc;border:2px double #8baebb}
+html[data-theme=royal] .character-book .book-title::before{content:'◆';display:block;color:#b8e9ff;font-size:30px;text-shadow:0 0 14px #5cafff;margin-bottom:10px}
+html[data-theme=royal] .dashboard-main .resource-list{background:#2c1e36;box-shadow:none;border-color:#5d8193}
+html[data-theme=royal] .dashboard-main .resource{background:#33223f;border-bottom-color:#365262}
+html[data-theme=royal] .dashboard-main .inspiration-resource{margin-bottom:0}
+html[data-theme=royal] .dashboard-main .ability-name,html[data-theme=royal] .dashboard-main .ability-name:hover:not(:disabled){border:0;outline-offset:4px;background:transparent;box-shadow:none;filter:none}
+html[data-theme=royal] .dashboard-main .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=royal] .dashboard-main .use-label:has(input:checked){background:transparent;border:0;box-shadow:none}
+html[data-theme=royal] body{background-color:#140e1c;background-image:radial-gradient(ellipse at 90% 0%,#865bb633,transparent 55%),radial-gradient(ellipse at 5% 90%,#d5ae4a12,transparent 60%),repeating-linear-gradient(115deg,#ffffff02 0 1px,transparent 1px 7px);background-size:auto;background-attachment:fixed}
+html[data-theme=royal] .character-book,html[data-theme=royal] .paper-sheet,html[data-theme=royal] .grimoire,html[data-theme=royal] .story-book,html[data-theme=royal] .health-card,html[data-theme=royal] .rest-card,html[data-theme=royal] .group,html[data-theme=royal] .panel,html[data-theme=royal] dialog{background:linear-gradient(135deg,#392742fa,#1c1226fa);border:3px double #b69a61;border-radius:3px;box-shadow:inset 0 0 0 1px #51402e,0 8px 30px #0007}
+html[data-theme=royal] .character-book .book-title::before{content:"◆";color:#e9cb7e;font-size:27px;text-shadow:0 0 18px #d6ab4b55}
+html[data-theme=royal] .use-label input[type=checkbox]{appearance:none;width:15px;height:15px;min-height:0;padding:0;transform:rotate(45deg);border:1px solid #ead392;background:#d0ac5b;box-shadow:0 0 6px #b5edff44;cursor:pointer}html[data-theme=royal] .use-label input[type=checkbox]:checked{background:#3b2b43;border-color:#557383;box-shadow:none}html[data-theme=royal] .use-label input[type=checkbox]:focus-visible{outline:2px solid #d9f5ff;outline-offset:3px}
+html[data-theme=royal] .book-nav button:focus-visible::before{content:"◆ ";color:#ead08b}
+
+
+
+html[data-theme=royal] .character-book .book-title::before{content:'✦';font-size:32px}
+
+/* Death save checks remain readable without resource diamond styling. */
+html[data-theme=royal] .death-saves .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=royal] .death-saves .use-label input[type=checkbox]{transform:none;width:22px;height:22px;border-radius:50%;background:#21162c;border:2px solid #bba16b;box-shadow:none}
+html[data-theme=royal] .death-saves .use-label input[type=checkbox]:checked{background:#d0ac5b;border-color:#ead392}
+html[data-theme=royal] .death-saves .use-label input[type=checkbox]:checked:after{color:#21162c;font-size:16px;line-height:18px}
+
+/* Siege of Veilfall — local preview */
+html[data-theme=siege]{color-scheme:dark;--bg:#040d25;--surface:#0b2051;--surface2:#14316b;--line:#8ba8d5;--text:#f1f6ff;--muted:#b3c7e9;--accent:#b7d3e9;--dark:#071b3e;--red:#ffb4b6;--blue:#b7d3e9;--radius:7px}
+html[data-theme=siege] body{background-color:#030b20;background-image:radial-gradient(circle at 14% 17%,#e6f5ff99 0 1px,transparent 2px),radial-gradient(circle at 75% 40%,#8aceff88 0 1px,transparent 2px),radial-gradient(circle at 38% 80%,#e6f5ff55 0 1px,transparent 2px),radial-gradient(ellipse at 85% 5%,#194d9a99,transparent 55%),radial-gradient(ellipse at 0% 80%,#103a7599,transparent 60%);background-size:163px 193px,239px 307px,311px 223px,100% 100%,100% 100%;background-attachment:fixed;color:var(--text)}
+html[data-theme=siege] h1,html[data-theme=siege] h2,html[data-theme=siege] h3{color:#e1f0ff;text-shadow:0 2px 4px #0008}
+html[data-theme=siege] .character-book,html[data-theme=siege] .paper-sheet,html[data-theme=siege] .grimoire,html[data-theme=siege] .story-book,html[data-theme=siege] .health-card,html[data-theme=siege] .rest-card,html[data-theme=siege] .group,html[data-theme=siege] .panel,html[data-theme=siege] .session-panel,html[data-theme=siege] dialog{background:linear-gradient(135deg,#102e69f5,#061433f5);border:3px double #8ea9c1;border-radius:8px;box-shadow:inset 0 0 0 1px #294e89,0 6px 24px #0006;color:var(--text)}
+html[data-theme=siege] button{background:linear-gradient(#234b91,#102c66);border:1px solid #b0c9e9;color:#f5f9ff;border-radius:5px;box-shadow:inset 0 0 0 2px #203c72,0 2px 4px #0004}
+html[data-theme=siege] button:hover:not(:disabled){background:linear-gradient(#3169bf,#174690);border-color:#e8f5ff;box-shadow:0 0 10px #5db9ff66}
+html[data-theme=siege] button.primary{background:linear-gradient(#2876d5,#134393);color:white;border-color:#c2e9ff}
+html[data-theme=siege] .text-button,html[data-theme=siege] .ability-name,html[data-theme=siege] .small-help{background:transparent;box-shadow:none;color:var(--text)}
+html[data-theme=siege] .book-nav{border-bottom:3px double #8eaed9;padding-bottom:14px;gap:8px}
+html[data-theme=siege] .book-nav button:focus-visible::before{content:'☞ ';color:white}
+html[data-theme=siege] .contents-entries>button{background:linear-gradient(100deg,#122f63bb,#071937bb);color:var(--text);border-color:#6688bc;box-shadow:none}
+html[data-theme=siege] .chapter-number,html[data-theme=siege] .chapter-arrow,html[data-theme=siege] .book-flourish{color:#c8e0f3}
+html[data-theme=siege] input,html[data-theme=siege] select,html[data-theme=siege] textarea,html[data-theme=siege] .paper-sheet input,html[data-theme=siege] .paper-sheet select,html[data-theme=siege] .paper-sheet textarea{background:#071735;color:var(--text);border:1px solid #5b7fb2;border-radius:4px}
+html[data-theme=siege] input[readonly],html[data-theme=siege] .paper-sheet input[readonly]{background:#0c2450!important;color:#e5f2ff}
+html[data-theme=siege] input::placeholder,html[data-theme=siege] textarea::placeholder{color:#a1b8dc;opacity:1}
+html[data-theme=siege] input[type=checkbox]{accent-color:#49a4ff}
+html[data-theme=siege] .resource,html[data-theme=siege] .paper-box,html[data-theme=siege] .paper-ability,html[data-theme=siege] .paper-modifier,html[data-theme=siege] .grimoire-level,html[data-theme=siege] .origin-feat,html[data-theme=siege] .class-choice,html[data-theme=siege] .stored-feat,html[data-theme=siege] .stored-special{background:#0a2152b3;border-color:#7198cc;color:var(--text)}
+html[data-theme=siege] .paper-box>h2,html[data-theme=siege] .paper-ability h2,html[data-theme=siege] .paper-field>span,html[data-theme=siege] .paper-legend,html[data-theme=siege] .paper-attacks-head,html[data-theme=siege] .feature-reference summary,html[data-theme=siege] .paper-ability h2 .save-marker,html[data-theme=siege] .hp-value{color:#e1f0ff}
+html[data-theme=siege] .paper-heading,html[data-theme=siege] .paper-character,html[data-theme=siege] .group-heading,html[data-theme=siege] .class-choice,html[data-theme=siege] .story-heading,html[data-theme=siege] .story-entry,html[data-theme=siege] .grimoire-heading,html[data-theme=siege] .grimoire-title,html[data-theme=siege] .grimoire-spell{border-color:#697891}
+html[data-theme=siege] .meter{background:#020b22;border:1px solid #a9c7df;border-radius:4px;overflow:hidden}
+html[data-theme=siege] .meter>div{background:linear-gradient(#a2ef82,#2f9b36);box-shadow:0 0 8px #71ed6855}
+html[data-theme=siege] #takeDamage{background:linear-gradient(#7e2949,#4a1830);color:#fff1f1;border-color:#e8a2ad}
+html[data-theme=siege] #applyHealing{background:linear-gradient(#236b4a,#103d2b);color:#effff4;border-color:#9ed4b7}
+html[data-theme=siege] .use-label{background:#081833;border-color:#99b8e3;color:white}
+html[data-theme=siege] .use-label:has(input:checked){background:linear-gradient(#3273ba,#174783);border-color:#ceefff;box-shadow:0 0 6px #84c8ff55}
+html[data-theme=siege] .grimoire-blank,html[data-theme=siege] .grimoire-lines,html[data-theme=siege] .spell-level-number,html[data-theme=siege] .grimoire-level>header{background:transparent;border-color:#697891;color:#e1f0ff}
+html[data-theme=siege] .story-prose{color:#e4edff}
+html[data-theme=siege] .story-prose:first-letter{color:#b9e3ff}
+html[data-theme=siege] #abilityHelp,html[data-theme=siege] #toast{background:#102c5f;color:#f2f8ff;border:2px double #a9c9ee}
+html[data-theme=siege] .character-book .book-title::before{content:'◆';display:block;color:#b8e9ff;font-size:30px;text-shadow:0 0 14px #5cafff;margin-bottom:10px}
+html[data-theme=siege] .dashboard-main .resource-list{background:#0a2050;box-shadow:none;border-color:#5378ac}
+html[data-theme=siege] .dashboard-main .resource{background:#0b2453;border-bottom-color:#355887}
+html[data-theme=siege] .dashboard-main .inspiration-resource{margin-bottom:0}
+html[data-theme=siege] .dashboard-main .ability-name,html[data-theme=siege] .dashboard-main .ability-name:hover:not(:disabled){border:0;outline-offset:4px;background:transparent;box-shadow:none;filter:none}
+html[data-theme=siege] .dashboard-main .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=siege] .dashboard-main .use-label:has(input:checked){background:transparent;border:0;box-shadow:none}
+html[data-theme=siege]{--bg:#101622;--surface:#1b293e;--surface2:#263954;--line:#7d8da4;--text:#f0eee8;--muted:#b6c3d4;--accent:#b7d3e9;--dark:#101a2b}
+html[data-theme=siege] body{background-color:#0c111c;background-image:radial-gradient(ellipse at 80% 0%,#4d356533,transparent 55%),radial-gradient(ellipse at 0% 80%,#194b7c33,transparent 65%);background-size:auto}
+html[data-theme=siege] .character-book,html[data-theme=siege] .paper-sheet,html[data-theme=siege] .grimoire,html[data-theme=siege] .story-book,html[data-theme=siege] .health-card,html[data-theme=siege] .rest-card,html[data-theme=siege] .group,html[data-theme=siege] .panel,html[data-theme=siege] .session-panel,html[data-theme=siege] dialog{background:linear-gradient(135deg,#293a51fa,#131c2cfa);border:3px double #8d9bb0;border-radius:4px;box-shadow:inset 0 0 0 1px #384960,0 8px 28px #0007}
+html[data-theme=siege] button{background:linear-gradient(#284f8b,#172d54);border-color:#8ea9c1;box-shadow:inset 0 0 0 1px #3c547b}
+html[data-theme=siege] button.primary{background:linear-gradient(#3865b4,#213f79);border-color:#b0cce8}
+html[data-theme=siege] .book-nav{border-bottom-color:#89a9cc}
+html[data-theme=siege] .character-book .book-title::before{content:'♜';color:#b7d3e9;text-shadow:0 0 18px #80b8ec33;font-size:34px}
+html[data-theme=siege] .dashboard-main .resource-list,html[data-theme=siege] .dashboard-main .resource{background:#1b293e;border-color:#4b5c75}
+html[data-theme=siege] .meter>div{background:linear-gradient(#a8cde6,#527ea9);box-shadow:none}
+html[data-theme=siege] .death-saves .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=siege] .use-label input[type=checkbox]{background:#132138;border-color:#9cacc4}
+html[data-theme=siege] .use-label input[type=checkbox]:checked{background:#99bedf;border-color:#cee4f6}
+html[data-theme=siege] .use-label input[type=checkbox]:checked:after{color:#142039}
+html[data-theme=siege] .dashboard-main .ability-name,html[data-theme=siege] .dashboard-main .ability-name:hover:not(:disabled){background:transparent;border:0;box-shadow:none}
+html[data-theme=siege] .story-prose:first-letter{color:#b7d3e9}
+/* Siege typography: engraved chapter headings with readable game text. */
+html[data-theme=siege] h1,html[data-theme=siege] h2,html[data-theme=siege] h3,html[data-theme=siege] .book-title,html[data-theme=siege] .contents-entries strong{font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-variant:small-caps;font-weight:700;letter-spacing:.065em;text-shadow:0 1px 0 #0a1222,0 0 15px #8ebeff18}
+html[data-theme=siege] .book-title{letter-spacing:.09em}
+html[data-theme=siege] .chapter-number,html[data-theme=siege] .hp-value{font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-variant-numeric:lining-nums;letter-spacing:.025em}
+html[data-theme=siege] .book-nav button,html[data-theme=siege] .ability-name{font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-weight:700;letter-spacing:.025em}
+html[data-theme=siege] .story-prose{font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;line-height:1.8}
+/* Siege: blackened steel and shadow, distinct from Crystal Blue. */
+html[data-theme=siege]{--bg:#090a0c;--surface:#191b1e;--surface2:#24272b;--line:#848b92;--text:#e4e9ed;--muted:#aeb7bf;--accent:#c2ccd4;--dark:#101215}
+html[data-theme=siege] body{background-color:#08090b;background-image:radial-gradient(ellipse at 85% 0%,#a8bdcf13,transparent 55%),repeating-linear-gradient(120deg,#ffffff02 0 1px,transparent 1px 8px);background-size:auto}
+html[data-theme=siege] .character-book,html[data-theme=siege] .paper-sheet,html[data-theme=siege] .grimoire,html[data-theme=siege] .story-book,html[data-theme=siege] .health-card,html[data-theme=siege] .rest-card,html[data-theme=siege] .group,html[data-theme=siege] .panel,html[data-theme=siege] .session-panel,html[data-theme=siege] dialog{background:linear-gradient(135deg,#22262afa,#0e1013fa);border-color:#818a92;box-shadow:inset 0 0 0 1px #30363b,0 8px 28px #0009}
+html[data-theme=siege] button,html[data-theme=siege] .contents-entries>button{background:linear-gradient(120deg,#2b3035,#15181c);border-color:#7d8992;color:#e4e9ed;box-shadow:inset 0 0 0 1px #343c43}
+html[data-theme=siege] button:hover:not(:disabled){background:linear-gradient(#3a434b,#23292f);border-color:#c5d0d8;box-shadow:0 0 10px #b5d4ea22}
+html[data-theme=siege] button.primary{background:linear-gradient(#39444d,#20272d);border-color:#a5b6c2}
+html[data-theme=siege] input,html[data-theme=siege] select,html[data-theme=siege] textarea,html[data-theme=siege] .paper-sheet input,html[data-theme=siege] .paper-sheet select,html[data-theme=siege] .paper-sheet textarea{background:#101215;border-color:#59656e;color:#e4e9ed}
+html[data-theme=siege] input[readonly],html[data-theme=siege] .paper-sheet input[readonly]{background:#20262b!important;color:#e4e9ed}
+html[data-theme=siege] .resource,html[data-theme=siege] .paper-box,html[data-theme=siege] .paper-ability,html[data-theme=siege] .paper-modifier,html[data-theme=siege] .grimoire-level,html[data-theme=siege] .origin-feat,html[data-theme=siege] .class-choice,html[data-theme=siege] .stored-feat,html[data-theme=siege] .stored-special,html[data-theme=siege] .dashboard-main .resource-list,html[data-theme=siege] .dashboard-main .resource{background:#191d21;border-color:#48535c}
+html[data-theme=siege] .meter{background:#090c0e;border-color:#798892}
+html[data-theme=siege] .meter>div{background:linear-gradient(#c1d0dc,#6c8292)}
+html[data-theme=siege] .chapter-number,html[data-theme=siege] .chapter-arrow,html[data-theme=siege] .book-flourish,html[data-theme=siege] .character-book .book-title::before,html[data-theme=siege] .story-prose:first-letter{color:#c5d0d8;text-shadow:none}
+html[data-theme=siege] .book-nav{border-bottom-color:#778b9a}
+html[data-theme=siege] .use-label input[type=checkbox]{background:#101418;border-color:#8a9eac}
+html[data-theme=siege] .use-label input[type=checkbox]:checked{background:#b4c7d4;border-color:#dfedf5}
+html[data-theme=siege] .use-label input[type=checkbox]:checked:after{color:#111a20}
+html[data-theme=siege] .death-saves .use-label,html[data-theme=siege] .death-saves .use-label:has(input:checked){background:transparent;box-shadow:none;border:0}
+html[data-theme=siege] #abilityHelp,html[data-theme=siege] #toast{background:#222b32;color:#e6f0f6;border-color:#94aebf}
+/* Siege: electric-blue checks and key numbers against blackened steel. */
+html[data-theme=siege]{--blue:#69b8ff;--accent:#69b8ff}
+html[data-theme=siege] input[type=checkbox]{accent-color:#419df5}
+html[data-theme=siege] .use-label input[type=checkbox]:checked,html[data-theme=siege] .death-saves .use-label input[type=checkbox]:checked{background:#419df5;border-color:#91ccff;box-shadow:0 0 6px #419df52b}
+html[data-theme=siege] .use-label input[type=checkbox]:checked:after,html[data-theme=siege] .death-saves .use-label input[type=checkbox]:checked:after{color:#071827}
+html[data-theme=siege] .hp-value,html[data-theme=siege] .chapter-number,html[data-theme=siege] .paper-modifier input[readonly],html[data-theme=siege] .paper-ability input[readonly],html[data-theme=siege] .paper-ability select{color:#86c5ff}
+html[data-theme=siege] .paper-ability h2 .save-marker{color:#69b8ff}
+/* Siege: consistent blue values for character and combat statistics. */
+html[data-theme=siege] .paper-sheet input[type=number],html[data-theme=siege] .paper-sheet input[readonly],html[data-theme=siege] .health-card input[type=number],html[data-theme=siege] .health-card input[readonly],html[data-theme=siege] .counter input,html[data-theme=siege] .remaining{color:#86c5ff}
+html[data-theme=siege] .paper-sheet input[readonly]{color:#86c5ff}
+/* Siege: unified blue typography, silver framing. */
+html[data-theme=siege]{--text:#86c5ff;--muted:#86c5ff;--accent:#86c5ff;--blue:#86c5ff;--line:#848b92}
+html[data-theme=siege] body,html[data-theme=siege] body :is(h1,h2,h3,h4,p,span,strong,b,label,summary,a,button,input,select,textarea,small,legend,th,td,li,dt,dd),html[data-theme=siege] .story-prose,html[data-theme=siege] .paper-sheet input[readonly],html[data-theme=siege] #abilityHelp,html[data-theme=siege] #toast{color:#86c5ff}
+html[data-theme=siege] input::placeholder,html[data-theme=siege] textarea::placeholder{color:#86c5ff;opacity:.75}
+html[data-theme=siege] .character-book .book-title::before,html[data-theme=siege] .story-prose:first-letter,html[data-theme=siege] .book-nav button:focus-visible::before{color:#86c5ff}
+html[data-theme=siege] body :is(button,input,select,textarea),html[data-theme=siege] .book-nav,html[data-theme=siege] .meter,html[data-theme=siege] .paper-box,html[data-theme=siege] .paper-ability,html[data-theme=siege] .paper-modifier,html[data-theme=siege] .grimoire-level,html[data-theme=siege] .dashboard-main .resource-list,html[data-theme=siege] .dashboard-main .resource{border-color:#848b92}
+html[data-theme=siege] .use-label input[type=checkbox]:checked,html[data-theme=siege] .death-saves .use-label input[type=checkbox]:checked{border-color:#b4c0c9}
+html[data-theme=siege] .use-label input[type=checkbox]:checked:after,html[data-theme=siege] .death-saves .use-label input[type=checkbox]:checked:after{color:#071827}
+/* Enforce Siege's chosen lettering color through nested legacy styles. */
+html[data-theme=siege] body,html[data-theme=siege] body *,html[data-theme=siege] body *::before,html[data-theme=siege] body *::after{color:#86c5ff!important}
+html[data-theme=siege] input::placeholder,html[data-theme=siege] textarea::placeholder{color:#86c5ff!important}
+html[data-theme=siege] .use-label input[type=checkbox]:checked:after{color:#071827!important}
+/* Siege damage/heal controls match the blackened steel palette. */
+html[data-theme=siege] #takeDamage,html[data-theme=siege] #applyHealing{background:linear-gradient(#2b3035,#15181c);border:1px solid #848b92;box-shadow:inset 0 0 0 1px #343c43;color:#86c5ff}
+html[data-theme=siege] #takeDamage:hover:not(:disabled),html[data-theme=siege] #applyHealing:hover:not(:disabled){background:linear-gradient(#3a434b,#23292f);border-color:#b4c0c9;box-shadow:0 0 10px #b5d4ea22}

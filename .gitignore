@@ -16,3 +16,5 @@ node_modules/
 
 # Logs
 *.log
+# Private character exports
+Character-Chronicle-backup-*.json
