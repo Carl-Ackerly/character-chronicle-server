@@ -18,3 +18,12 @@ node_modules/
 *.log
 # Private character exports
 Character-Chronicle-backup-*.json
+
+# Private audit snapshots and temporary files
+logs/
+
+# Private owner account setup and recovery notes
+private-admin/
+
+# Private automatic database snapshots and partial files
+private-backups/

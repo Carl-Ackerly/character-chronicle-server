@@ -2,7 +2,11 @@
 
 A learning project for a self-hosted backend for **Character Chronicle**, a D&D character-management app with character sheets, a spellbook, combat resources, and story notes.
 
-This repository contains a learning server and an isolated, working full-app integration prototype. A snapshot of the existing [Character Chronicle frontend](https://github.com/Carl-Ackerly/combat-tracker) connects to SQLite locally on port 3001. The public GitHub Pages app remains separate and unchanged.
+This repository contains the original learning server, a full-app integration prototype, and the optional-account Character Chronicle preview. A snapshot of the existing [Character Chronicle frontend](https://github.com/Carl-Ackerly/combat-tracker) connects to SQLite locally on port 3001. The public GitHub Pages app remains separate and unchanged.
+
+## Optional accounts and recovery — local preview
+
+Run `node account-server.js` and open http://127.0.0.1:3002. This separate, local-only preview adds optional accounts, private books, and administrator-assisted one-use reset codes. The public app is unchanged. See [ACCOUNTS.md](ACCOUNTS.md), [RECOVERY.md](RECOVERY.md), and [ROADMAP.md](ROADMAP.md). Use test credentials; HTTPS/public deployment is not enabled.
 
 ## Full-app integration prototype
 
@@ -22,14 +26,15 @@ Open http://127.0.0.1:3001. Create a separate test character and select **Connec
 
 See [INTEGRATION.md](INTEGRATION.md) for architecture, limitations, and isolated test instructions. The `app-preview/` snapshot comes from the existing frontend; it is not a second independently designed UI.
 
-## Two server modes
+## Server modes
 
 | Command | Address | Purpose |
 | --- | --- | --- |
+| `node account-server.js` | http://127.0.0.1:3002 | Optional accounts, automatic sync, recovery, settings, and backups |
 | `node server.js` | http://127.0.0.1:3000 | Original learning form and GET/POST/PATCH character routes |
 | `node app-server.js` | http://127.0.0.1:3001 | Existing full app connected to a separate test-book database |
 
-Both bind to loopback only and use different database files. Stop a foreground server with Ctrl+C.
+All three modes bind to loopback only and use different database files. Stop a foreground server with Ctrl+C.
 
 ## Learning server functionality
 
@@ -170,3 +175,7 @@ Built step by step to practice JavaScript, HTTP methods, JSON, SQL table design,
 ## Verified checkpoint — October 16, 2026
 
 Manual testing confirmed that a synthetic multiclass Fighter/Wizard character, level changes, spent Second Wind uses, notes/story entries, spellbook selections, and dashboard changes reload in a separate incognito browser via Load server copy. Automated checks cover SQLite restart persistence, nested JSON preservation, invalid requests, stale-revision rejection, local saves during outages, reconnection, asset restrictions, and responsive widths.
+
+
+## Current account-preview checkpoint
+The account preview includes automatic syncing and whole-book conflict recovery, administrator-assisted reset codes, signed-in passphrase changes, private security audit logs, and consistent daily backups with separate-file restore tests. These features belong to port 3002; the older port-3001 prototype still has its earlier limitations. See [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) for current status, setup/test instructions, remaining deployment work, and the decision to keep registration open. Run the regression suite with `npm test`. Private account records, databases, logs, and backups are excluded from Git. Public hosting is not enabled.

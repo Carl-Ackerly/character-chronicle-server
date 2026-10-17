@@ -1,0 +1,39 @@
+html[data-theme=crystal]{color-scheme:dark;--bg:#040d25;--surface:#0b2051;--surface2:#14316b;--line:#8ba8d5;--text:#f1f6ff;--muted:#b3c7e9;--accent:#bfe4ff;--dark:#071b3e;--red:#ffb4b6;--blue:#bfe4ff;--radius:7px}
+html[data-theme=crystal] body{background-color:#030b20;background-image:radial-gradient(circle at 14% 17%,#e6f5ff99 0 1px,transparent 2px),radial-gradient(circle at 75% 40%,#8aceff88 0 1px,transparent 2px),radial-gradient(circle at 38% 80%,#e6f5ff55 0 1px,transparent 2px),radial-gradient(ellipse at 85% 5%,#194d9a99,transparent 55%),radial-gradient(ellipse at 0% 80%,#103a7599,transparent 60%);background-size:163px 193px,239px 307px,311px 223px,100% 100%,100% 100%;background-attachment:fixed;color:var(--text)}
+html[data-theme=crystal] h1,html[data-theme=crystal] h2,html[data-theme=crystal] h3{color:#e1f0ff;text-shadow:0 2px 4px #0008}
+html[data-theme=crystal] .character-book,html[data-theme=crystal] .paper-sheet,html[data-theme=crystal] .grimoire,html[data-theme=crystal] .story-book,html[data-theme=crystal] .health-card,html[data-theme=crystal] .rest-card,html[data-theme=crystal] .group,html[data-theme=crystal] .panel,html[data-theme=crystal] .session-panel,html[data-theme=crystal] dialog{background:linear-gradient(135deg,#102e69f5,#061433f5);border:3px double #a7bfdf;border-radius:8px;box-shadow:inset 0 0 0 1px #294e89,0 6px 24px #0006;color:var(--text)}
+html[data-theme=crystal] button{background:linear-gradient(#234b91,#102c66);border:1px solid #b0c9e9;color:#f5f9ff;border-radius:5px;box-shadow:inset 0 0 0 2px #203c72,0 2px 4px #0004}
+html[data-theme=crystal] button:hover:not(:disabled){background:linear-gradient(#3169bf,#174690);border-color:#e8f5ff;box-shadow:0 0 10px #5db9ff66}
+html[data-theme=crystal] button.primary{background:linear-gradient(#2876d5,#134393);color:white;border-color:#c2e9ff}
+html[data-theme=crystal] .text-button,html[data-theme=crystal] .ability-name,html[data-theme=crystal] .small-help{background:transparent;box-shadow:none;color:var(--text)}
+html[data-theme=crystal] .book-nav{border-bottom:3px double #8eaed9;padding-bottom:14px;gap:8px}
+html[data-theme=crystal] .book-nav button:focus-visible::before{content:'☞ ';color:white}
+html[data-theme=crystal] .contents-entries>button{background:linear-gradient(100deg,#122f63bb,#071937bb);color:var(--text);border-color:#6688bc;box-shadow:none}
+html[data-theme=crystal] .chapter-number,html[data-theme=crystal] .chapter-arrow,html[data-theme=crystal] .book-flourish{color:#c8eaff}
+html[data-theme=crystal] input,html[data-theme=crystal] select,html[data-theme=crystal] textarea,html[data-theme=crystal] .paper-sheet input,html[data-theme=crystal] .paper-sheet select,html[data-theme=crystal] .paper-sheet textarea{background:#071735;color:var(--text);border:1px solid #5b7fb2;border-radius:4px}
+html[data-theme=crystal] input[readonly],html[data-theme=crystal] .paper-sheet input[readonly]{background:#0c2450!important;color:#e5f2ff}
+html[data-theme=crystal] input::placeholder,html[data-theme=crystal] textarea::placeholder{color:#a1b8dc;opacity:1}
+html[data-theme=crystal] input[type=checkbox]{accent-color:#49a4ff}
+html[data-theme=crystal] .resource,html[data-theme=crystal] .paper-box,html[data-theme=crystal] .paper-ability,html[data-theme=crystal] .paper-modifier,html[data-theme=crystal] .grimoire-level,html[data-theme=crystal] .origin-feat,html[data-theme=crystal] .class-choice,html[data-theme=crystal] .stored-feat,html[data-theme=crystal] .stored-special{background:#0a2152b3;border-color:#7198cc;color:var(--text)}
+html[data-theme=crystal] .paper-box>h2,html[data-theme=crystal] .paper-ability h2,html[data-theme=crystal] .paper-field>span,html[data-theme=crystal] .paper-legend,html[data-theme=crystal] .paper-attacks-head,html[data-theme=crystal] .feature-reference summary,html[data-theme=crystal] .paper-ability h2 .save-marker,html[data-theme=crystal] .hp-value{color:#e1f0ff}
+html[data-theme=crystal] .paper-heading,html[data-theme=crystal] .paper-character,html[data-theme=crystal] .group-heading,html[data-theme=crystal] .class-choice,html[data-theme=crystal] .story-heading,html[data-theme=crystal] .story-entry,html[data-theme=crystal] .grimoire-heading,html[data-theme=crystal] .grimoire-title,html[data-theme=crystal] .grimoire-spell{border-color:#6b91c6}
+html[data-theme=crystal] .meter{background:#020b22;border:1px solid #a9c7df;border-radius:4px;overflow:hidden}
+html[data-theme=crystal] .meter>div{background:linear-gradient(#a2ef82,#2f9b36);box-shadow:0 0 8px #71ed6855}
+html[data-theme=crystal] #takeDamage{background:linear-gradient(#7e2949,#4a1830);color:#fff1f1;border-color:#e8a2ad}
+html[data-theme=crystal] #applyHealing{background:linear-gradient(#236b4a,#103d2b);color:#effff4;border-color:#9ed4b7}
+html[data-theme=crystal] .use-label{background:#081833;border-color:#99b8e3;color:white}
+html[data-theme=crystal] .use-label:has(input:checked){background:linear-gradient(#3273ba,#174783);border-color:#ceefff;box-shadow:0 0 6px #84c8ff55}
+html[data-theme=crystal] .grimoire-blank,html[data-theme=crystal] .grimoire-lines,html[data-theme=crystal] .spell-level-number,html[data-theme=crystal] .grimoire-level>header{background:transparent;border-color:#6b91c6;color:#e1f0ff}
+html[data-theme=crystal] .story-prose{color:#e4edff}
+html[data-theme=crystal] .story-prose:first-letter{color:#b9e3ff}
+html[data-theme=crystal] #abilityHelp,html[data-theme=crystal] #toast{background:#102c5f;color:#f2f8ff;border:2px double #a9c9ee}
+.theme-preview-control{display:flex;align-items:center;gap:8px;font:12px system-ui,sans-serif}.theme-preview-control select{width:155px;min-height:34px;padding:5px 8px}.theme-preview-control span{white-space:nowrap}
+html[data-theme=crystal] .character-book .book-title::before{content:'◆';display:block;color:#b8e9ff;font-size:30px;text-shadow:0 0 14px #5cafff;margin-bottom:10px}
+html[data-theme=crystal] .dashboard-main .resource-list{background:#0a2050;box-shadow:none;border-color:#5378ac}
+html[data-theme=crystal] .dashboard-main .resource{background:#0b2453;border-bottom-color:#355887}
+html[data-theme=crystal] .dashboard-main .inspiration-resource{margin-bottom:0}
+html[data-theme=crystal] .dashboard-main .ability-name,html[data-theme=crystal] .dashboard-main .ability-name:hover:not(:disabled){border:0;outline-offset:4px;background:transparent;box-shadow:none;filter:none}
+html[data-theme=crystal] .dashboard-main .use-label{background:transparent;border:0;box-shadow:none}
+html[data-theme=crystal] .dashboard-main .use-label:has(input:checked){background:transparent;border:0;box-shadow:none}
+
+.theme-switcher{max-width:1160px;margin:0 auto;padding:14px 24px 0;justify-content:flex-end}.theme-switcher select{width:165px}.theme-switcher+main{padding-top:20px}@media(max-width:650px){.theme-switcher{padding:12px 16px 0}.theme-switcher+main{padding-top:14px}}
