@@ -8,6 +8,8 @@ const { createAuth } = require('./account-auth');
 const { createAuditFile } = require('./account-audit-file');
 const { createBackups } = require('./account-backups');
 function createAccountServer(options = {}) {
+  const privateOrigin = options.privateOrigin ? new URL(options.privateOrigin) : null;
+  if (privateOrigin && (privateOrigin.protocol !== 'https:' || privateOrigin.port || privateOrigin.username || privateOrigin.password || privateOrigin.pathname !== '/' || privateOrigin.search || privateOrigin.hash || !privateOrigin.hostname.endsWith('.ts.net'))) throw Error('Configure an HTTPS Tailscale hostname only.');
   const databasePath = options.databasePath || path.join(projectRoot, 'character-chronicle-accounts-test.db');
   const db = new DatabaseSync(databasePath);
   const publicPath = options.publicPath || path.join(projectRoot, 'frontend');
@@ -60,9 +62,14 @@ function createAccountServer(options = {}) {
     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
     try {
       const port = server.address()?.port;
-      if (![ `127.0.0.1:${port}`, `localhost:${port}` ].includes(req.headers.host)) return reply(res, 421, { message: 'Local test address required.' });
-      if ((req.headers.origin && req.headers.origin !== `http://${req.headers.host}`) || req.headers['sec-fetch-site'] === 'cross-site') return reply(res, 403, { message: 'Cross-site request rejected.' });
-      const url = new URL(req.url, `http://${req.headers.host}`);
+      const loopback = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
+      const privateRequest = loopback && privateOrigin && req.headers.host === privateOrigin.host;
+      if (!loopback || (!privateRequest && ![`127.0.0.1:${port}`, `localhost:${port}`].includes(req.headers.host))) return reply(res, 421, { message: 'Configured app address required.' });
+      // Never infer trust from client-supplied forwarding headers.
+      req.ccSecureTransport = Boolean(privateRequest);
+      const requestOrigin = privateRequest ? privateOrigin.origin : `http://${req.headers.host}`;
+      if ((req.headers.origin && req.headers.origin !== requestOrigin) || req.headers['sec-fetch-site'] === 'cross-site') return reply(res, 403, { message: 'Cross-site request rejected.' });
+      const url = new URL(req.url, requestOrigin);
       const mutation = !['GET', 'HEAD'].includes(req.method);
       if (url.pathname.startsWith('/api/')) {
         if (mutation && (req.headers['x-cc-client'] !== '1' || req.headers['content-type']?.split(';')[0].trim() !== 'application/json')) return reply(res, 403, { message: 'JSON app request required.' });
@@ -105,7 +112,9 @@ function createAccountServer(options = {}) {
 }
 module.exports = { createAccountServer };
 function main() {
-  const server = createAccountServer();
+  const configPath = path.join(projectRoot, 'private-admin', 'private-access.json');
+  const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : {};
+  const server = createAccountServer({ privateOrigin: config.privateOrigin });
   server.listen(3002, '127.0.0.1', () => console.log('Optional account TEST: http://127.0.0.1:3002 — loopback only, test passphrases only'));
   server.on('error', error => { console.error('Account test server:', error.message);process.exitCode = 1; });
   process.on('SIGINT', () => server.close());

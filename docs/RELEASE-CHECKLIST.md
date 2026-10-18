@@ -44,3 +44,11 @@ Start the current account preview with `node account-server.js`, then open `http
 
 ## Privacy and cookie review
 The current account preview uses local scripts, a session cookie, and browser storage for character functionality; no analytics or tracking pixels were identified in the inspected code. Before public release, publish a clear privacy/storage notice and review applicable requirements, including browser storage and optional preferences. Do not add a consent banner just as decoration. Any future nonessential tracking requiring consent must remain disabled until affirmative consent, with refusal/withdrawal respected. A third-party script is not automatically a tracker; assess its actual behavior. Recheck deployed network traffic and hosting-added services before launch.
+
+## Verified private checkpoint — October 18, 2026
+
+Private Tailscale Serve HTTPS is configured on the owner installation. The server still listens only on loopback; the configured HTTPS hostname is explicit, request Host/Origin checks remain enforced, and HTTPS sessions receive Secure cookies. Synthetic tests reject other hosts, cross-origin requests, and forwarding-header spoofing. The full Windows regression suite passed for this checkpoint.
+
+The owner confirmed iPhone account sign-in and automatic server-book updates. A confirmed existing-character export was backed up and merged into its owner's account without replacing other characters; the imported record matched every source field, credentials and unrelated books remained unchanged, and verified database snapshots were made before and after. Private records and exports are excluded from Git.
+
+This verifies private access, not public deployment. Real outage/background tests, Linux hosting, trusted client-IP handling for a future public proxy, privacy/licensing review, recovery drills and release review remain pending.

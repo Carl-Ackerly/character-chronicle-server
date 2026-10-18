@@ -47,8 +47,8 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000, registrationMode = 'i
     db.prepare('DELETE FROM login_sessions WHERE expires_at <= ?').run(Date.now());
     const token = random(), csrf = random();
     db.prepare('INSERT INTO login_sessions (token_hash, account_id, csrf, expires_at) VALUES (?, ?, ?, ?)').run(tokenHash(token), user.id, csrf, Date.now() + sessionTtl);
-    // HTTP cookie is strictly a loopback-test exception. HTTPS deployment is not enabled.
-    res.setHeader('Set-Cookie', `${cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${Math.floor(sessionTtl / 1000)}`);
+    // Secure cookies for the explicitly configured private HTTPS origin.
+    res.setHeader('Set-Cookie', `${cookieName}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${Math.floor(sessionTtl / 1000)}${req.ccSecureTransport ? '; Secure' : ''}`);
     recovery.audit(user.id, user.id, 'session-started', 'success');
     return { user: { id: user.id, username: user.username, role: user.role || 'member' }, csrf };
   }
@@ -79,7 +79,7 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000, registrationMode = 'i
       const user = session(req);
       if (!user) return reply(res, 401, { message: 'Sign in first.' });
       if (!safeEqual(req.headers['x-csrf-token'], user.csrf)) return reply(res, 403, { message: 'Invalid session request.' });
-      revoke(req);recovery.audit(user.id, user.id, 'logout', 'success');res.setHeader('Set-Cookie', `${cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`);
+      revoke(req);recovery.audit(user.id, user.id, 'logout', 'success');res.setHeader('Set-Cookie', `${cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${req.ccSecureTransport ? '; Secure' : ''}`);
       return reply(res, 200, { message: 'Signed out.' });
     }
     if (!['/api/auth/register', '/api/auth/login'].includes(pathname)) return reply(res, 404, { message: 'Not found.' });
@@ -151,7 +151,7 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000, registrationMode = 'i
       db.prepare('UPDATE password_resets SET used_at = ? WHERE account_id = ? AND used_at IS NULL').run(Date.now(), user.id);
       recovery.audit(user.id, user.id, 'password-change', 'success');db.exec('COMMIT');
     } catch (error) { db.exec('ROLLBACK');throw error; }
-    res.setHeader('Set-Cookie', `${cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`);
+    res.setHeader('Set-Cookie', `${cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${req.ccSecureTransport ? '; Secure' : ''}`);
     return reply(res, 200, { message: 'Passphrase changed. All sessions are signed out. Sign in with your new passphrase. Your characters are unchanged.' });
   }
   async function admin(req, res, pathname, input, reply) {

@@ -1,8 +1,27 @@
 # Character Chronicle
 
-A D&D character book with character sheets, a spellbook, combat resource tracking, story notes, themes, and optional accounts for invited players. This repository now maintains the browser app and its self-hosted Node.js/SQLite backend together.
+A personal D&D character book: character sheets, spell preparation, battle resources, story notes, and selectable themes. The project combines a browser interface with a self-hosted Node.js and SQLite account server.
 
-The [earlier public app](https://carl-ackerly.github.io/combat-tracker/) and [its repository](https://github.com/Carl-Ackerly/combat-tracker) remain available. They are not automatically updated by this combined project's feature branches.
+## Open the app
+
+### [Open Character Chronicle — account sign-in](https://siege.tailb9139f.ts.net)
+
+**Currently private:** the link requires Tailscale on an approved device. The host computer must be awake with the account server running. Opening this public README does not grant network access or an app account. New accounts require a one-use invitation from the administrator.
+
+Sign into the same Character Chronicle account on your phone and computer to access the same saved character book. Tailscale sign-in and Character Chronicle sign-in are separate.
+
+**[Older public app — local saves only](https://carl-ackerly.github.io/combat-tracker/)** remains available as a fallback without Tailscale. Its browser saves are separate from account saves; they are not automatically imported into an account.
+
+## What it does
+
+- Character sheets with class choices, feats, equipment, currency, and calculated statistics.
+- Spellbooks with prepared spells, spell details, and custom spells.
+- Battle dashboards for hit points, spell slots, and class resources.
+- Dated story notes and selectable visual themes.
+- Optional invited accounts with automatic book synchronization and conflict review.
+- Administrator-assisted password recovery, private audit logs, consistent database backups, and encrypted backup copies.
+
+Character data is stored on the host server and cached in the browser. GitHub stores source code, not player accounts or character books. Device-only mode stores characters in that browser and does not synchronize them.
 
 ## Run locally
 
@@ -12,7 +31,7 @@ Use Node.js 24 or later (verified with Node.js 24 on Windows). The server itself
 npm start
 ```
 
-Open http://127.0.0.1:3002/. The familiar `node account-server.js` command also works. The app remains loopback-only: this is a development preview, not a public deployment. HTTPS access and the dedicated Linux host still need to be configured.
+Open http://127.0.0.1:3002/. The familiar `node account-server.js` command also works. The Node server remains bound to loopback. The current owner installation uses Tailscale Serve for private HTTPS access; it is not a public deployment. See [private access setup](docs/PRIVATE-ACCESS.md). A fresh clone has no private hostname configuration.
 
 - Anyone can choose **Use on this device** without an account. Those characters stay in that browser.
 - New accounts require an administrator-issued, one-use invitation. Members sign in to access their own account books.
@@ -60,7 +79,7 @@ Then run:
 npm test
 ```
 
-Tests create disposable synthetic databases/browser contexts rather than opening the real account database or reading recovery keys. They cover full book persistence, account isolation, invitation/recovery abuse, passphrase changes, sessions, stale writes, automatic sync/conflicts, backups/restore, encrypted exports/key rotation, responsive UI, and theme contrast. Actual Linux hosting/phone connectivity, CI automation, and a final release review remain outstanding.
+Tests create disposable synthetic databases/browser contexts rather than opening the real account database or reading recovery keys. They cover full book persistence, account isolation, invitation/recovery abuse, passphrase changes, sessions, stale writes, automatic sync/conflicts, backups/restore, encrypted exports/key rotation, responsive UI, and theme contrast. Private iPhone sign-in and automatic book loading have been manually confirmed. Linux hosting, public HTTPS deployment, CI automation, and the final release review remain outstanding.
 
 ## Owner commands
 
@@ -79,6 +98,7 @@ Administrator grants require local server filesystem access and are not web endp
 ## Guides
 
 - [Accounts](docs/ACCOUNTS.md), [invitations](docs/INVITATIONS.md), [account recovery](docs/RECOVERY.md), [passphrase changes](docs/PASSPHRASE-CHANGES.md)
+- [Private device access](docs/PRIVATE-ACCESS.md)
 - [Automatic synchronization](docs/SYNC.md), [database backups and restore](docs/BACKUPS.md), [encrypted OneDrive copies](docs/ONEDRIVE-BACKUPS.md), [security audit logs](docs/LOGGING.md)
 - [Release checklist](docs/RELEASE-CHECKLIST.md), [roadmap and checkpoints](docs/ROADMAP.md), [structure and rollback](docs/PROJECT-STRUCTURE.md)
 - [Learning history](docs/LEARNING-HISTORY.md), [earlier single-user integration](docs/INTEGRATION.md)
