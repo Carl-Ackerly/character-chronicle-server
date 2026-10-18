@@ -27,3 +27,8 @@ private-admin/
 
 # Private automatic database snapshots and partial files
 private-backups/
+
+# Encrypted cloud snapshots and recovery-key copies
+*.ccbackup
+*.ccbackup.*.partial
+backup-recovery-key.json

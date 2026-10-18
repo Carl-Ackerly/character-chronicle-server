@@ -193,3 +193,8 @@ The owner superseded the earlier open-registration decision: known people receiv
 
 ## Manual invitation verification — October 18, 2026
 The owner confirmed an invitation creates a new account and reuse is rejected. Error wording now distinguishes a missing invitation from an invalid, expired, or already-used invitation. Existing accounts and private character data are unchanged.
+
+## Encrypted OneDrive backup checkpoint — October 18, 2026
+The owner chose OneDrive for the second backup location. Completed, verified SQLite snapshots now export as AES-256-GCM encrypted files in a dedicated OneDrive folder. The recovery key/configuration stay in Git-ignored private-admin outside OneDrive; the owner must save a separate secure key copy. Startup/hourly checks retry exports even when no new daily snapshot is due. Wrong-key/tamper and restore tests passed with synthetic accounts, along with existing backup/invitation regressions. Local encrypted copies were created and verified; actual cloud upload and remote sharing settings require OneDrive confirmation. Off-device key storage, retention, monitoring, and the eventual Linux drill remain pending.
+
+Backup recovery key was replaced October 18 after accidental disclosure. Replacement encryption and retirement were verified; accounts and character books stayed unchanged. Private archives retain previous recovery material locally. Owner must confirm OneDrive sync and update the separate Bitwarden secure note from the local active key file. No key values belong in this roadmap or Git.

@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { DatabaseSync } = require('node:sqlite');
+const { loadMirror } = require('./account-cloud-backup');
 const DAY = 24 * 60 * 60 * 1000;
 function verify(filename) {
   const db = new DatabaseSync(filename, { readOnly: true });
@@ -19,13 +20,14 @@ function createBackups(db, databasePath, options = {}) {
   const directory = options.directory || path.join(path.dirname(databasePath), 'private-backups');
   const prefix = 'accounts-' + crypto.createHash('sha256').update(path.resolve(databasePath)).digest('hex').slice(0,12) + '-';
   const interval = options.interval || DAY;
+  const mirror = options.mirror === undefined ? loadMirror(databasePath) : options.mirror;
   let last = 0, warned = false;
   try {
     const entries = fs.readdirSync(directory).filter(name => name.startsWith(prefix) && name.endsWith('.sqlite')).map(name => ({ filename:path.join(directory,name), modified:fs.statSync(path.join(directory,name)).mtimeMs })).sort((a,b)=>b.modified-a.modified);
     for (const entry of entries) { try { verify(entry.filename);last = entry.modified;break; } catch {} }
   } catch {}
   function run(force = false) {
-    if (!force && Date.now() - last < interval) return null;
+    if (!force && Date.now() - last < interval) { syncMirror();return null; }
     let partial;
     try {
       fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
@@ -33,11 +35,20 @@ function createBackups(db, databasePath, options = {}) {
       partial = filename + '.partial';
       db.prepare('VACUUM INTO ?').run(partial);
       fs.chmodSync(partial, 0o600);verify(partial);fs.renameSync(partial, filename);
-      last = Date.now();warned = false;return filename;
+      last = Date.now();warned = false;syncMirror();return filename;
     } catch {
       if (!warned) console.error('Automatic database backup failed. Existing data and earlier backups are retained; check private backup storage.');
       warned = true;return false;
     } finally { if (partial) { try { fs.unlinkSync(partial); } catch {} } }
+  }
+  function syncMirror() {
+    if (!mirror) return;
+    try {
+      for (const name of fs.readdirSync(directory).filter(name => name.startsWith(prefix) && name.endsWith('.sqlite')).sort()) {
+        const filename=path.join(directory,name);verify(filename);
+        if (!mirror.sync(filename)) break;
+      }
+    } catch { console.error('Encrypted backup mirror could not scan local snapshots. Local backups are retained.'); }
   }
   return { run, directory };
 }

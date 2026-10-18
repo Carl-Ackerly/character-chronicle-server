@@ -35,3 +35,5 @@ Before switching live databases: stop the account server, make a fresh backup of
 Synthetic tests round-trip full nested character data, spells, notes, resources, sessions, unknown fields, account credentials, and administrator roles. They verify daily/restart eligibility, invalid/corrupt backup rejection, refusal to overwrite live/existing files, preservation on storage failure, old-session rejection, reset-code invalidation, and successful sign-in and book retrieval from a separate restored server. Real characters and the owner's account were not used for restore testing. Actual Linux execution and disaster recovery on the eventual dedicated host remain pending.
 
 Invitation update: snapshots also include account_invitations; the restore utility invalidates outstanding invitations alongside sessions and reset codes.
+
+Encrypted OneDrive mirror is now available: see ONEDRIVE-BACKUPS.md. The live database stays outside OneDrive. Retain a separate recovery-key copy and verify the OneDrive client completes upload; local export status alone does not prove off-device storage.
