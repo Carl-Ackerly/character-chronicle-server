@@ -1,10 +1,10 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),crypto=require('node:crypto');
 const {DatabaseSync}=require('node:sqlite');
-const {createAuth}=require('./account-auth');
-const {createInvitations}=require('./account-invitations');
-const {createBackups,verify}=require('./account-backups');
-const {encrypt,decrypt,readKey,createMirror,loadMirror,restoreEncrypted}=require('./account-cloud-backup');
-const {setup}=require('./account-backup-setup');
+const {createAuth}=require('../server/account-auth');
+const {createInvitations}=require('../server/account-invitations');
+const {createBackups,verify}=require('../server/account-backups');
+const {encrypt,decrypt,readKey,createMirror,loadMirror,restoreEncrypted}=require('../server/account-cloud-backup');
+const {setup}=require('../server/account-backup-setup');
 const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-cloud-')),databasePath=path.join(dir,'test.db'),keyFile=path.join(dir,'recovery-key.json'),destination=path.join(dir,'mock-onedrive');
 const key=crypto.randomBytes(32);fs.writeFileSync(keyFile,JSON.stringify({version:1,key:key.toString('base64')}),{mode:0o600});
 const db=new DatabaseSync(databasePath);

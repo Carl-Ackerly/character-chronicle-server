@@ -1,8 +1,8 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const {DatabaseSync}=require('node:sqlite');
-const {createAccountServer}=require('./account-server');
-const {createRecovery}=require('./account-recovery');
-const {chromium,launchOptions}=require('./tests/browser-runtime.cjs');
+const {createAccountServer}=require('../server/account-server');
+const {createRecovery}=require('../server/account-recovery');
+const {chromium,launchOptions}=require('./browser-runtime.cjs');
 (async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-password-')),databasePath=path.join(dir,'test.db'),server=createAccountServer({registrationMode:'open',databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
  try {

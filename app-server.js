@@ -7,7 +7,7 @@ const { DatabaseSync } = require('node:sqlite');
 // This separate database stores the entire book, including unknown future fields.
 function createAppServer(options = {}) {
   const databasePath = options.databasePath || path.join(__dirname, 'character-chronicle-app-test.db');
-  const publicPath = options.publicPath || path.join(__dirname, 'app-preview');
+  const publicPath = options.publicPath || path.join(__dirname, 'legacy', 'app-preview');
   const db = new DatabaseSync(databasePath);
   db.exec(`CREATE TABLE IF NOT EXISTS character_books (
     id TEXT PRIMARY KEY,

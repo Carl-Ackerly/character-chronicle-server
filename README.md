@@ -1,183 +1,92 @@
-# Character Chronicle Server
+# Character Chronicle
 
-A learning project for a self-hosted backend for **Character Chronicle**, a D&D character-management app with character sheets, a spellbook, combat resources, and story notes.
+A D&D character book with character sheets, a spellbook, combat resource tracking, story notes, themes, and optional accounts for invited players. This repository now maintains the browser app and its self-hosted Node.js/SQLite backend together.
 
-This repository contains the original learning server, a full-app integration prototype, and the optional-account Character Chronicle preview. A snapshot of the existing [Character Chronicle frontend](https://github.com/Carl-Ackerly/combat-tracker) connects to SQLite locally on port 3001. The public GitHub Pages app remains separate and unchanged.
+The [earlier public app](https://carl-ackerly.github.io/combat-tracker/) and [its repository](https://github.com/Carl-Ackerly/combat-tracker) remain available. They are not automatically updated by this combined project's feature branches.
 
-## Optional accounts and recovery — local preview
+## Run locally
 
-Run `node account-server.js` and open http://127.0.0.1:3002. This separate, local-only preview adds optional accounts, private books, and administrator-assisted one-use reset codes. The public app is unchanged. See [ACCOUNTS.md](ACCOUNTS.md), [RECOVERY.md](RECOVERY.md), and [ROADMAP.md](ROADMAP.md). Use test credentials; HTTPS/public deployment is not enabled.
+Use Node.js 24 or later (verified with Node.js 24 on Windows). The server itself uses Node built-ins and has no production package dependencies.
 
-## Full-app integration prototype
-
-Run:
-
-```powershell
-node app-server.js
+```sh
+npm start
 ```
 
-Open http://127.0.0.1:3001. Create a separate test character and select **Connect test saves**. The existing character sheet, spellbook, notes, and battle dashboard save the complete book locally first, then upload it to a separate SQLite database. In a fresh browser session, select **Load server copy** to retrieve it. Downloading newer changes is manual; this is not yet multi-user cloud syncing.
+Open http://127.0.0.1:3002/. The familiar `node account-server.js` command also works. The app remains loopback-only: this is a development preview, not a public deployment. HTTPS access and the dedicated Linux host still need to be configured.
 
-- Full nested JSON is preserved, including custom fields and saved sessions.
-- Revision checks reject stale writes rather than silently overwriting a newer copy.
-- Pending changes remain local during connection failures.
-- No login, remote access, or public deployment is implemented.
-- No real character records, databases, or backup exports are included in Git.
+- Anyone can choose **Use on this device** without an account. Those characters stay in that browser.
+- New accounts require an administrator-issued, one-use invitation. Members sign in to access their own account books.
+- Account changes save locally first, then sync when connected. Clean copies check for updates automatically; conflicting books are preserved for review.
+- Administrator-assisted recovery and signed-in passphrase changes preserve character books and revoke affected sessions.
+- Consistent local backups and optional encrypted OneDrive copies support separate-file recovery. Private owner notes, keys, databases, logs, and backups never belong in Git.
 
-See [INTEGRATION.md](INTEGRATION.md) for architecture, limitations, and isolated test instructions. The `app-preview/` snapshot comes from the existing frontend; it is not a second independently designed UI.
+See [the current release checklist](docs/RELEASE-CHECKLIST.md) for completed functionality, remaining limitations, and deployment work. A passing test suite is not a substitute for the remaining release/security review.
 
-## Server modes
+## Project layout
 
-| Command | Address | Purpose |
-| --- | --- | --- |
-| `node account-server.js` | http://127.0.0.1:3002 | Optional accounts, automatic sync, recovery, settings, and backups |
-| `node server.js` | http://127.0.0.1:3000 | Original learning form and GET/POST/PATCH character routes |
-| `node app-server.js` | http://127.0.0.1:3001 | Existing full app connected to a separate test-book database |
-
-All three modes bind to loopback only and use different database files. Stop a foreground server with Ctrl+C.
-
-## Learning server functionality
-
-- Runs a local HTTP server using Node.js.
-- Serves a browser form for adding characters, with a saved-character list that refreshes after successful saves.
-- Stores characters persistently in SQLite.
-- Lists characters through `GET /characters`.
-- Accepts JSON through `POST /characters`, validates basic fields, and saves a character.
-- Updates a character level through `PATCH /characters/:id`, with existence and level checks.
-- Uses parameterized SQL for inserts and updates.
-- Keeps local databases and environment files out of Git through `.gitignore`.
-
-## Technology
-
-- JavaScript (CommonJS)
-- Node.js built-in `node:http` and `node:sqlite` modules
-- SQLite and SQL
-- PowerShell for testing requests
-- Git and GitHub for version control
-
-## Getting started with the learning server
-
-Use **Node.js 24 LTS**. The project currently has no external dependencies, so no `npm install` step is needed. Node may print an experimental warning for its SQLite module.
-
-Clone the repository and enter the folder:
-
-```powershell
-git clone https://github.com/Carl-Ackerly/character-chronicle-server.git
-cd character-chronicle-server
-```
-
-Initialize the database **before starting the server**:
-
-```powershell
-node database.js
-```
-
-This creates `character-chronicle.db` beside the source files, creates the table if needed, and prints existing rows. It does not insert sample characters or erase existing rows.
-
-Start the server:
-
-```powershell
-node server.js
-```
-
-Open [http://127.0.0.1:3000/characters](http://127.0.0.1:3000/characters) to view saved characters. A new database returns `[]`.
-
-Keep the terminal running while using the server. Press **Ctrl+C** to stop it. Restart after editing and saving server code.
-
-## Try the API
-
-### Read characters
-
-In a second PowerShell terminal:
-
-```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:3000/characters" -Method Get
-```
-
-### Add a character
-
-```powershell
-$character = @{
-    name = "Practice Hero"
-    level = 2
-    max_hp = 18
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "http://127.0.0.1:3000/characters" -Method Post -ContentType "application/json" -Body $character
-```
-
-A successful request returns:
-
-```json
-{ "message": "Character saved" }
-```
-
-Refresh the characters page to see the new row. **Each successful POST creates another character**, including repeated submissions of the same values.
-
-| Field | Requirement |
+| Folder | What to edit |
 | --- | --- |
-| `name` | Nonempty string; surrounding whitespace is removed |
-| `level` | Integer from 1 to 20 |
-| `max_hp` | Positive integer |
+| `frontend/` | Current character book, dashboard, spellbook, story, themes, and account UI |
+| `server/` | Account APIs, recovery, invitations, audit logging, and backup implementation |
+| `tests/` | Isolated synthetic API/browser/backup tests |
+| `docs/` | Setup, operation, recovery, and deployment guides |
+| `legacy/app-preview/` | Frozen earlier single-user UI retained for the learning prototype |
 
-Missing or invalid fields return HTTP 400. Successful reads return HTTP 200; inserts return HTTP 201 Created.
+Root `account-*.js` files are compatibility launchers, not duplicate implementations. See [PROJECT-STRUCTURE.md](docs/PROJECT-STRUCTURE.md). The original learning exercise remains at the root for reference.
 
-## Database structure
+## Existing data stays where it is
 
-The initial `characters` table contains:
+The source reorganization does not move the existing account database, private configuration, administrator identity, recovery keys, logs, or snapshots. Private paths remain at the project root and outside OneDrive. The browser address/storage keys are preserved. Never overwrite or commit these files while updating source.
 
-```sql
-CREATE TABLE IF NOT EXISTS characters (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL,
-  level INTEGER NOT NULL DEFAULT 1,
-  max_hp INTEGER NOT NULL DEFAULT 10
-);
+A fresh clone intentionally contains no actual users or characters. Start the account server once, create a private invitation with `node account-invite.js create`, register the owner, then explicitly grant that account administrator access with the local owner command. Normal registration never grants administrator status. Follow [INVITATIONS.md](docs/INVITATIONS.md) and [RECOVERY.md](docs/RECOVERY.md); do not repeat bootstrap against an existing configured database.
+
+## Test
+
+Install the pinned development-only browser test dependency:
+
+```sh
+npm ci
 ```
 
-SQLite assigns an ID when a row is inserted without one. This is a starter schema; accounts, full character records, spell selections, and battle state are not implemented yet.
+Windows browser tests use installed Microsoft Edge. For Linux, install the test browser first:
 
-## Project files
+```sh
+npx playwright install chromium
+```
 
-| File | Purpose |
-| --- | --- |
-| `server.js` | HTTP request handling, validation, and character reads/inserts |
-| `index.html` | Character form, POST submission, and automatically refreshed saved-character list |
-| `database.js` | Database initialization and a query showing existing rows |
-| `package.json` | Project metadata |
-| `.gitignore` | Excludes dependencies, local databases, secrets, and logs |
+Then run:
 
-The database is created locally and is not included in this repository. GitHub holds the source code; it does not run this backend or sync character data.
+```sh
+npm test
+```
 
-## Development status and limitations
+Tests create disposable synthetic databases/browser contexts rather than opening the real account database or reading recovery keys. They cover full book persistence, account isolation, invitation/recovery abuse, passphrase changes, sessions, stale writes, automatic sync/conflicts, backups/restore, encrypted exports/key rotation, responsive UI, and theme contrast. Actual Linux hosting/phone connectivity, CI automation, and a final release review remain outstanding.
 
-This is a **local learning prototype**, not a production-ready service. It listens only on `127.0.0.1:3000` on the host computer.
+## Owner commands
 
-The learning server has no authentication, per-player access control, cross-device syncing, delete endpoint, request-body size limit, or automated test suite of its own. The full-app prototype has separate isolated integration tests. Unknown routes return HTTP 404. Malformed JSON returns HTTP 400; other POST exceptions return HTTP 500. Further error handling will be refined as the server develops.
+Existing root commands are preserved:
 
-Keep the database outside folders actively synced by services such as OneDrive. For a simple manual backup, stop the server before copying the database file.
+```sh
+node account-admin.js grant-admin USERNAME
+node account-admin.js issue-reset USERNAME --identity-verified
+node account-admin.js recover-admin ADMIN_USERNAME
+node account-invite.js create
+node account-backup.js create
+```
 
-## Planned next steps
+Administrator grants require local server filesystem access and are not web endpoints. Private reset/invitation codes can appear in owner terminal output; do not put them in chat, Git, or transcripts. Verify requester identity before recovery. See the guides below before using restore, OneDrive setup, or key replacement commands.
 
-- Improve request handling and error responses.
-- Add meaningful automated API tests.
-- Expand the SQL schema for complete character data.
-- Add private player accounts and access controls.
-- Refine the existing frontend connection beyond the isolated prototype.
-- Implement offline-aware cross-device synchronization and conflict handling.
-- Explore private remote access and Docker deployment.
+## Guides
 
-## Learning focus
+- [Accounts](docs/ACCOUNTS.md), [invitations](docs/INVITATIONS.md), [account recovery](docs/RECOVERY.md), [passphrase changes](docs/PASSPHRASE-CHANGES.md)
+- [Automatic synchronization](docs/SYNC.md), [database backups and restore](docs/BACKUPS.md), [encrypted OneDrive copies](docs/ONEDRIVE-BACKUPS.md), [security audit logs](docs/LOGGING.md)
+- [Release checklist](docs/RELEASE-CHECKLIST.md), [roadmap and checkpoints](docs/ROADMAP.md), [structure and rollback](docs/PROJECT-STRUCTURE.md)
+- [Learning history](docs/LEARNING-HISTORY.md), [earlier single-user integration](docs/INTEGRATION.md)
 
-Built step by step to practice JavaScript, HTTP methods, JSON, SQL table design, parameterized queries, persistence, debugging, and version control.
+## Preserved learning commands
 
+`node server.js` still runs the original learning form/API on port 3000. `node app-server.js` still runs the earlier single-user integration prototype on port 3001 using the frozen legacy UI. Their separate database files are preserved. These unauthenticated learning prototypes are not the account app and must not be exposed publicly.
 
-## Verified checkpoint — October 16, 2026
+## Rules and attribution
 
-Manual testing confirmed that a synthetic multiclass Fighter/Wizard character, level changes, spent Second Wind uses, notes/story entries, spellbook selections, and dashboard changes reload in a separate incognito browser via Load server copy. Automated checks cover SQLite restart persistence, nested JSON preservation, invalid requests, stale-revision rejection, local saves during outages, reconnection, asset restrictions, and responsive widths.
-
-
-## Current account-preview checkpoint
-The account preview includes automatic syncing and whole-book conflict recovery, administrator-assisted reset codes, signed-in passphrase changes, private security audit logs, and consistent daily backups with separate-file restore tests. These features belong to port 3002; the older port-3001 prototype still has its earlier limitations. See [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) for current status, setup/test instructions, remaining deployment work, and the decision to keep registration open. Run the regression suite with `npm test`. Private account records, databases, logs, and backups are excluded from Git. Public hosting is not enabled.
-
-Account-creation policy update: accounts now require administrator-issued one-use invitations; device-only use remains available without an account. Existing accounts keep their data and access. See [INVITATIONS.md](INVITATIONS.md). This supersedes the earlier open-registration decision.
+The frontend retains its existing rules/source notices and SRD attribution. It remains an evolving 2024-rules aid; do not interpret source consolidation as certification that every Player's Handbook rule is complete or verified. The previous public release remains available until a separately reviewed cutover.

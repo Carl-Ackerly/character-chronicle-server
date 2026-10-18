@@ -23,7 +23,7 @@ No dependencies need installing beyond Node.js 24. The existing `.gitignore` exc
 
 ## Verification
 
-Run `node integration.test.cjs` to run the isolated API/browser checks. Browser tests require Playwright (the development machine already provides it) and Microsoft Edge on Windows; alternatively supply PLAYWRIGHT_MODULE and PLAYWRIGHT_CHANNEL. The app server itself needs no third-party packages. Tests use temporary databases and synthetic records, never your real characters.
+Run `node tests/integration.test.cjs` to run the isolated API/browser checks. Browser tests require Playwright (the development machine already provides it) and Microsoft Edge on Windows; alternatively supply PLAYWRIGHT_MODULE and PLAYWRIGHT_CHANNEL. The app server itself needs no third-party packages. Tests use temporary databases and synthetic records, never your real characters.
 
 The full app snapshot is derived from combat-tracker main commit 00d238d55f77a48ea34037af7d08fcff42f85a12. This test copy is not automatically updated when the public frontend changes.
 

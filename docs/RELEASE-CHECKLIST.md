@@ -23,7 +23,7 @@ Synthetic tests cover the major account, recovery, backup/restore, sync, and UI 
 
 ## Remaining before public release
 
-- [ ] Consolidate frontend/backend into a maintained source structure and documented repository relationship without breaking the existing release.
+- [x] Consolidate frontend/backend into a maintained source structure and documented repository relationship without breaking the existing release.
 - [ ] Configure the dedicated Linux host, supported Node runtime, least-privilege service, automatic startup/shutdown, updates, and monitoring.
 - [ ] Choose HTTPS access and one stable app address. Configure Secure cookies, precise Host/Origin/proxy rules, and trustworthy client-IP rate limits. Do not expose database files or administration of the PC.
 - [ ] Review open-registration abuse controls, limits, credential policy, recovery verification, and administrative access.
@@ -38,7 +38,7 @@ Synthetic tests cover the major account, recovery, backup/restore, sync, and UI 
 
 Use a supported Node.js 24 runtime with `node:sqlite`. From this repository run `node tests/run-tests.cjs` (or `npm test`). Tests use disposable synthetic databases and browser contexts, never the real account database.
 
-Browser tests require Playwright. If it is not already available in your development environment, install it locally with `npm install --no-save playwright`. Windows tests use installed Microsoft Edge by default; Linux uses Playwright Chromium, which must be installed with `npx playwright install chromium`. The current test helper also supports the existing local development runtime as a fallback. Runtime/package pinning and CI setup remain release work.
+Browser tests require Playwright. If it is not already available in your development environment, install it locally with `npm install --no-save playwright`. Windows tests use installed Microsoft Edge by default; Linux uses Playwright Chromium, which must be installed with `npx playwright install chromium`. The current test helper also supports the existing local development runtime as a fallback. The development browser package is now pinned in package-lock.json; CI setup remains release work.
 
 Start the current account preview with `node account-server.js`, then open `http://127.0.0.1:3002/`. Other devices cannot reach this loopback address on your PC. Production connectivity must be configured deliberately; publishing source to GitHub does not deploy the server.
 

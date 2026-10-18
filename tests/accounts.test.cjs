@@ -3,8 +3,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
-const { createAccountServer } = require('./account-server');
-const { chromium, launchOptions } = require('./tests/browser-runtime.cjs');
+const { createAccountServer } = require('../server/account-server');
+const { chromium, launchOptions } = require('./browser-runtime.cjs');
 const PASS = 'Test-only passphrase 2026!';
 const fixture = name => ({ version: 1, active: 'same-character-id', extension: { keep: true }, characters: [{ id: 'same-character-id', name, classes: [{ name: 'Wizard', level: 5, subclass: 'Evoker' }], hp: 20, maxHp: 40, tempHp: 0, resources: {}, custom: [], sessions: [], sheet: {}, spellbook: { Wizard: { added: ['magic-missile'], prepared: ['magic-missile'], custom: [{ name: 'Fixture spell', text: 'preserve' }] } }, notes: name + ' private notes' }] });
 (async () => {

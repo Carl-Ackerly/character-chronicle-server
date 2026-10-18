@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
-const {createAccountServer}=require('./account-server');
-const {chromium,launchOptions}=require('./tests/browser-runtime.cjs');
+const {createAccountServer}=require('../server/account-server');
+const {chromium,launchOptions}=require('./browser-runtime.cjs');
 const {DatabaseSync}=require('node:sqlite');
 (async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-sync-')),server=createAccountServer({registrationMode:'open',databasePath:path.join(dir,'test.db')});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;

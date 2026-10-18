@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path');
-const { createAccountServer } = require('./account-server');
-const { chromium, launchOptions } = require('./tests/browser-runtime.cjs');
+const { createAccountServer } = require('../server/account-server');
+const { chromium, launchOptions } = require('./browser-runtime.cjs');
 (async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-home-'));
   const server = createAccountServer({ databasePath: path.join(dir, 'test.db') });

@@ -1,9 +1,9 @@
 const assert = require('node:assert/strict');
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const {DatabaseSync}=require('node:sqlite');
-const {createAccountServer}=require('./account-server');
-const {createBackups,restore,verify}=require('./account-backups');
-const {createRecovery}=require('./account-recovery');
+const {createAccountServer}=require('../server/account-server');
+const {createBackups,restore,verify}=require('../server/account-backups');
+const {createRecovery}=require('../server/account-recovery');
 (async()=>{
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-backups-')),databasePath=path.join(dir,'source.db');
   let server=createAccountServer({registrationMode:'open',databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));

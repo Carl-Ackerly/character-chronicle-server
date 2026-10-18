@@ -1,13 +1,22 @@
 {
   "name": "character-chronicle-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Character Chronicle character book and optional-account server",
+  "main": "server/account-server.js",
   "scripts": {
-    "test": "node tests/run-tests.cjs"
+    "test": "node tests/run-tests.cjs",
+    "start": "node account-server.js",
+    "start:legacy": "node app-server.js",
+    "start:learning": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
 }

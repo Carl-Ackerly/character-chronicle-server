@@ -3,10 +3,10 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
-const { createAccountServer } = require('./account-server');
-const { run } = require('./account-admin');
-const { createRecovery } = require('./account-recovery');
-const { createAuditFile } = require('./account-audit-file');
+const { createAccountServer } = require('../server/account-server');
+const { run } = require('../server/account-admin');
+const { createRecovery } = require('../server/account-recovery');
+const { createAuditFile } = require('../server/account-audit-file');
 (async () => {
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-audit-')),databasePath=path.join(dir,'accounts.db'),filename=path.join(dir,'logs','security-audit.log');
   const server=createAccountServer({registrationMode:'open',databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));const url='http://127.0.0.1:'+server.address().port;

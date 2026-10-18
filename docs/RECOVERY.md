@@ -49,7 +49,7 @@ The active database gets new tables and default member roles, not a destructive 
 
 ## Verification
 
-Run `node recovery.test.cjs` and `node accounts.test.cjs`. The tests use temporary databases and synthetic accounts. They verify member rejection, reauthentication/CSRF requirements, rate limits, expiry, replacement of earlier codes, concurrent one-use redemption, wrong-user rejection, old-password failure, session revocation, private-book preservation, audit contents, owner recovery, legacy database migration, and browser form behavior.
+Run `node tests/recovery.test.cjs` and `node tests/accounts.test.cjs`. The tests use temporary databases and synthetic accounts. They verify member rejection, reauthentication/CSRF requirements, rate limits, expiry, replacement of earlier codes, concurrent one-use redemption, wrong-user rejection, old-password failure, session revocation, private-book preservation, audit contents, owner recovery, legacy database migration, and browser form behavior.
 
 ## Still outstanding
 

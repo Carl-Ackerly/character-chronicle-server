@@ -20,8 +20,8 @@ Clean account copies can retrieve newer server changes on focus/reconnect. Pendi
 
 - `account-auth.js`: account validation, asynchronous salted password hashing, sessions, and persisted login throttling.
 - `account-server.js`: loopback HTTP server, request defenses, and owner-scoped GET/PUT `/api/book`.
-- `account-preview/account-context.js`: chooses the active account's local storage key before the existing app loads.
-- `account-preview/account-sync.js`: optional login UI and the local-first account save bridge.
+- `frontend/account-context.js`: chooses the active account's local storage key before the existing app loads.
+- `frontend/account-sync.js`: optional login UI and the local-first account save bridge.
 - `character-chronicle-accounts-test.db`: SQLite tables for accounts, sessions, limits, and private account books. Ignored by Git.
 
 `account_books.account_id` belongs to an authenticated account. Ownership is selected from the server-side session, never from a requested user ID. The request's accountId is only a stale-tab guard. Books keep the complete JSON record and a revision for compare-and-save. The old `local-test` book is not copied into any account.
@@ -46,7 +46,7 @@ Administrator-assisted password recovery is now available locally; see [RECOVERY
 
 ## Tests
 
-Run `node accounts.test.cjs`. Like the earlier integration tests, this requires Playwright and Microsoft Edge on the development machine. The app server itself has no external package dependencies beyond Node.js 24.
+Run `node tests/accounts.test.cjs`. Like the earlier integration tests, this requires Playwright and Microsoft Edge on the development machine. The app server itself has no external package dependencies beyond Node.js 24.
 
 Tests use temporary SQLite databases and synthetic accounts. They check cross-account read/write isolation (including identical character IDs), password salt/hash storage, session rotation/logout/expiry, invalid credentials, CSRF, Origin/Host checks, request limits, authentication throttling, preservation of guest data, existing dashboard save integration, stale tabs after an account switch, and phone/desktop sizing.
 

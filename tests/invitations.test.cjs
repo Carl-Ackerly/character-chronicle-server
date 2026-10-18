@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
-const {DatabaseSync}=require('node:sqlite');const {createAccountServer}=require('./account-server');const {createInvitations}=require('./account-invitations');const {chromium,launchOptions}=require('./tests/browser-runtime.cjs');
-const {createBackups,restore}=require('./account-backups');
+const {DatabaseSync}=require('node:sqlite');const {createAccountServer}=require('../server/account-server');const {createInvitations}=require('../server/account-invitations');const {chromium,launchOptions}=require('./browser-runtime.cjs');
+const {createBackups,restore}=require('../server/account-backups');
 (async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-invites-')),databasePath=path.join(dir,'test.db');let server=createAccountServer({databasePath,registrationMode:'open'});await new Promise(r=>server.listen(0,'127.0.0.1',r));let url='http://127.0.0.1:'+server.address().port,browser,db;
  const request=(route,body,auth,extra={})=>fetch(url+route,{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json','X-CC-Client':'1',...(auth?{Cookie:auth.cookie,'X-CSRF-Token':auth.csrf}:{}),...extra},...(body===undefined?{}:{body:JSON.stringify(body)})});
