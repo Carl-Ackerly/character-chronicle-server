@@ -68,8 +68,14 @@ function createAccountServer(options = {}) {
       // Never infer trust from client-supplied forwarding headers.
       req.ccSecureTransport = Boolean(privateRequest);
       const requestOrigin = privateRequest ? privateOrigin.origin : `http://${req.headers.host}`;
-      if ((req.headers.origin && req.headers.origin !== requestOrigin) || req.headers['sec-fetch-site'] === 'cross-site') return reply(res, 403, { message: 'Cross-site request rejected.' });
       const url = new URL(req.url, requestOrigin);
+      // A link from another site may open the public app shell, never its APIs.
+      const externalNavigation = ['GET', 'HEAD'].includes(req.method) &&
+        ['/', '/index.html'].includes(url.pathname) &&
+        req.headers['sec-fetch-mode'] === 'navigate' &&
+        req.headers['sec-fetch-dest'] === 'document';
+      if ((req.headers.origin && req.headers.origin !== requestOrigin) ||
+          (req.headers['sec-fetch-site'] === 'cross-site' && !externalNavigation)) return reply(res, 403, { message: 'Cross-site request rejected.' });
       const mutation = !['GET', 'HEAD'].includes(req.method);
       if (url.pathname.startsWith('/api/')) {
         if (mutation && (req.headers['x-cc-client'] !== '1' || req.headers['content-type']?.split(';')[0].trim() !== 'application/json')) return reply(res, 403, { message: 'JSON app request required.' });
