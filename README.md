@@ -1,172 +1,52 @@
-# Character Chronicle Server
+# Character Chronicle
 
-A learning project for a self-hosted backend for **Character Chronicle**, a D&D character-management app with character sheets, a spellbook, combat resources, and story notes.
+A personal D&D character book: character sheets, spell preparation, battle resources, story notes, and selectable themes. The project combines a browser interface with a self-hosted Node.js and SQLite account server.
 
-This repository contains a learning server and an isolated, working full-app integration prototype. A snapshot of the existing [Character Chronicle frontend](https://github.com/Carl-Ackerly/combat-tracker) connects to SQLite locally on port 3001. The public GitHub Pages app remains separate and unchanged.
+## Open the app
 
-## Full-app integration prototype
+### [Open Character Chronicle — account sign-in](https://siege.tailb9139f.ts.net)
 
-Run:
+**Currently private:** the link requires Tailscale on an approved device. The host computer must be awake with the account server running. Opening this public README does not grant network access or an app account. New accounts require a one-use invitation from the administrator.
 
-```powershell
-node app-server.js
+Sign into the same Character Chronicle account on your phone and computer to access the same saved character book. Tailscale sign-in and Character Chronicle sign-in are separate.
+
+**[Older public app — local saves only](https://carl-ackerly.github.io/combat-tracker/)** remains available as a fallback without Tailscale. Its browser saves are separate from account saves; they are not automatically imported into an account.
+
+## What it does
+
+- Character sheets with class choices, feats, equipment, currency, and calculated statistics.
+- Spellbooks with prepared spells, spell details, and custom spells.
+- Battle dashboards for hit points, spell slots, and class resources.
+- Dated story notes and selectable visual themes.
+- Optional invited accounts with automatic book synchronization and conflict review.
+- Administrator-assisted password recovery, private audit logs, consistent database backups, and encrypted backup copies.
+
+Character data is stored on the host server and cached in the browser. GitHub stores source code, not player accounts or character books. Device-only mode stores characters in that browser and does not synchronize them.
+
+## Source and development status
+
+The current combined frontend/backend implementation is maintained on the [private-device-access branch](https://github.com/Carl-Ackerly/character-chronicle-server/tree/feature/private-device-access). The default branch still retains the original learning checkpoint; this README points to the current work without merging application code or deploying it publicly.
+
+The account server uses Node.js 24 and SQLite through Node's built-in modules. The frontend uses HTML, CSS, and JavaScript. Production server code has no external package dependencies; browser tests use Playwright.
+
+On the current implementation branch, start the account app with:
+
+```sh
+npm start
 ```
 
-Open http://127.0.0.1:3001. Create a separate test character and select **Connect test saves**. The existing character sheet, spellbook, notes, and battle dashboard save the complete book locally first, then upload it to a separate SQLite database. In a fresh browser session, select **Load server copy** to retrieve it. Downloading newer changes is manual; this is not yet multi-user cloud syncing.
+Open http://127.0.0.1:3002/ on the server computer. A fresh clone contains no users, characters, passwords, recovery keys, or private access settings. Follow the [current setup guide](https://github.com/Carl-Ackerly/character-chronicle-server/tree/feature/private-device-access#run-locally) before creating a new installation. Do not replace an existing account database while updating source.
 
-- Full nested JSON is preserved, including custom fields and saved sessions.
-- Revision checks reject stale writes rather than silently overwriting a newer copy.
-- Pending changes remain local during connection failures.
-- No login, remote access, or public deployment is implemented.
-- No real character records, databases, or backup exports are included in Git.
+## Verification and remaining work
 
-See [INTEGRATION.md](INTEGRATION.md) for architecture, limitations, and isolated test instructions. The `app-preview/` snapshot comes from the existing frontend; it is not a second independently designed UI.
+Automated synthetic tests cover account isolation, invitations, password recovery, session security, complete character-book persistence, sync conflicts, backups and restore, encrypted exports, private HTTPS request checks, responsive layouts, and theme contrast. The owner has confirmed private phone sign-in and automatic account-book loading.
 
-## Two server modes
+Before public release: configure the dedicated Linux mini PC and automatic startup, select the permanent HTTPS address, test Linux deployment and recovery, review privacy and rules/content licensing, and complete the security review. This is a private side project under development, not a claim of complete rules coverage or production certification.
 
-| Command | Address | Purpose |
-| --- | --- | --- |
-| `node server.js` | http://127.0.0.1:3000 | Original learning form and GET/POST/PATCH character routes |
-| `node app-server.js` | http://127.0.0.1:3001 | Existing full app connected to a separate test-book database |
+See the current branch's [release checklist](https://github.com/Carl-Ackerly/character-chronicle-server/tree/feature/private-device-access/docs/RELEASE-CHECKLIST.md), [project structure](https://github.com/Carl-Ackerly/character-chronicle-server/tree/feature/private-device-access/docs/PROJECT-STRUCTURE.md), and [private access guide](https://github.com/Carl-Ackerly/character-chronicle-server/tree/feature/private-device-access/docs/PRIVATE-ACCESS.md).
 
-Both bind to loopback only and use different database files. Stop a foreground server with Ctrl+C.
+## Project history
 
-## Learning server functionality
+This began as a JavaScript/HTTP/SQL learning server and grew into Character Chronicle. The original form/API and integration prototype remain available in source for reference. The [earlier frontend repository](https://github.com/Carl-Ackerly/combat-tracker) continues to host the public device-only version.
 
-- Runs a local HTTP server using Node.js.
-- Serves a browser form for adding characters, with a saved-character list that refreshes after successful saves.
-- Stores characters persistently in SQLite.
-- Lists characters through `GET /characters`.
-- Accepts JSON through `POST /characters`, validates basic fields, and saves a character.
-- Updates a character level through `PATCH /characters/:id`, with existence and level checks.
-- Uses parameterized SQL for inserts and updates.
-- Keeps local databases and environment files out of Git through `.gitignore`.
-
-## Technology
-
-- JavaScript (CommonJS)
-- Node.js built-in `node:http` and `node:sqlite` modules
-- SQLite and SQL
-- PowerShell for testing requests
-- Git and GitHub for version control
-
-## Getting started with the learning server
-
-Use **Node.js 24 LTS**. The project currently has no external dependencies, so no `npm install` step is needed. Node may print an experimental warning for its SQLite module.
-
-Clone the repository and enter the folder:
-
-```powershell
-git clone https://github.com/Carl-Ackerly/character-chronicle-server.git
-cd character-chronicle-server
-```
-
-Initialize the database **before starting the server**:
-
-```powershell
-node database.js
-```
-
-This creates `character-chronicle.db` beside the source files, creates the table if needed, and prints existing rows. It does not insert sample characters or erase existing rows.
-
-Start the server:
-
-```powershell
-node server.js
-```
-
-Open [http://127.0.0.1:3000/characters](http://127.0.0.1:3000/characters) to view saved characters. A new database returns `[]`.
-
-Keep the terminal running while using the server. Press **Ctrl+C** to stop it. Restart after editing and saving server code.
-
-## Try the API
-
-### Read characters
-
-In a second PowerShell terminal:
-
-```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:3000/characters" -Method Get
-```
-
-### Add a character
-
-```powershell
-$character = @{
-    name = "Practice Hero"
-    level = 2
-    max_hp = 18
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "http://127.0.0.1:3000/characters" -Method Post -ContentType "application/json" -Body $character
-```
-
-A successful request returns:
-
-```json
-{ "message": "Character saved" }
-```
-
-Refresh the characters page to see the new row. **Each successful POST creates another character**, including repeated submissions of the same values.
-
-| Field | Requirement |
-| --- | --- |
-| `name` | Nonempty string; surrounding whitespace is removed |
-| `level` | Integer from 1 to 20 |
-| `max_hp` | Positive integer |
-
-Missing or invalid fields return HTTP 400. Successful reads return HTTP 200; inserts return HTTP 201 Created.
-
-## Database structure
-
-The initial `characters` table contains:
-
-```sql
-CREATE TABLE IF NOT EXISTS characters (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL,
-  level INTEGER NOT NULL DEFAULT 1,
-  max_hp INTEGER NOT NULL DEFAULT 10
-);
-```
-
-SQLite assigns an ID when a row is inserted without one. This is a starter schema; accounts, full character records, spell selections, and battle state are not implemented yet.
-
-## Project files
-
-| File | Purpose |
-| --- | --- |
-| `server.js` | HTTP request handling, validation, and character reads/inserts |
-| `index.html` | Character form, POST submission, and automatically refreshed saved-character list |
-| `database.js` | Database initialization and a query showing existing rows |
-| `package.json` | Project metadata |
-| `.gitignore` | Excludes dependencies, local databases, secrets, and logs |
-
-The database is created locally and is not included in this repository. GitHub holds the source code; it does not run this backend or sync character data.
-
-## Development status and limitations
-
-This is a **local learning prototype**, not a production-ready service. It listens only on `127.0.0.1:3000` on the host computer.
-
-The learning server has no authentication, per-player access control, cross-device syncing, delete endpoint, request-body size limit, or automated test suite of its own. The full-app prototype has separate isolated integration tests. Unknown routes return HTTP 404. Malformed JSON returns HTTP 400; other POST exceptions return HTTP 500. Further error handling will be refined as the server develops.
-
-Keep the database outside folders actively synced by services such as OneDrive. For a simple manual backup, stop the server before copying the database file.
-
-## Planned next steps
-
-- Improve request handling and error responses.
-- Add meaningful automated API tests.
-- Expand the SQL schema for complete character data.
-- Add private player accounts and access controls.
-- Refine the existing frontend connection beyond the isolated prototype.
-- Implement offline-aware cross-device synchronization and conflict handling.
-- Explore private remote access and Docker deployment.
-
-## Learning focus
-
-Built step by step to practice JavaScript, HTTP methods, JSON, SQL table design, parameterized queries, persistence, debugging, and version control.
-
-
-## Verified checkpoint — October 16, 2026
-
-Manual testing confirmed that a synthetic multiclass Fighter/Wizard character, level changes, spent Second Wind uses, notes/story entries, spellbook selections, and dashboard changes reload in a separate incognito browser via Load server copy. Automated checks cover SQLite restart persistence, nested JSON preservation, invalid requests, stale-revision rejection, local saves during outages, reconnection, asset restrictions, and responsive widths.
+Private databases, backups, recovery material, and logs must never be committed. Keep existing data backed up before migration or updates.
