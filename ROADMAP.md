@@ -187,3 +187,9 @@ Account settings beside Sign out now allows current-passphrase verification and 
 
 ## Release planning decision — October 17, 2026
 The owner chose straightforward open self-service registration rather than invitations. Keep new registrations as ordinary members; retain sole owner administration. Signup-abuse defenses and HTTPS deployment checks remain required before public exposure. The owner manually verified automatic sync, choosing the device copy in a conflict, and the passphrase-change screen. RELEASE-CHECKLIST.md is the current release summary; earlier checkpoint notes above are historical.
+
+## Invitation-only account decision — October 17, 2026
+The owner superseded the earlier open-registration decision: known people receive private administrator-issued invitations for accounts; everyone else may use device-only mode without an account. Seven-day, one-use, hash-only invitations are enforced server-side and claimed transactionally. Existing accounts, roles, and books are preserved. Administrator UI requires reauthentication; a local owner CLI supports initial bootstrap. Restores invalidate outstanding invites. The complete regression suite passed in isolated synthetic databases, including invite expiry/replay/races, ordinary member roles, local access, account preservation, and secret-free logging. No invitation was generated for a real person during development.
+
+## Manual invitation verification — October 18, 2026
+The owner confirmed an invitation creates a new account and reuse is rejected. Error wording now distinguishes a missing invitation from an invalid, expired, or already-used invitation. Existing accounts and private character data are unchanged.

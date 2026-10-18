@@ -10,7 +10,7 @@ const fixture = name => ({ version: 1, active: 'same-character-id', extension: {
 (async () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-accounts-'));
   const databasePath = path.join(temp, 'accounts.db');
-  const server = createAccountServer({ databasePath });await new Promise(r => server.listen(0, '127.0.0.1', r));
+  const server = createAccountServer({registrationMode:'open', databasePath });await new Promise(r => server.listen(0, '127.0.0.1', r));
   const url = 'http://127.0.0.1:' + server.address().port;
   async function call(route, method = 'GET', body, login, extra = {}) {
     return fetch(url + route, { method, headers: { 'Content-Type': 'application/json', 'X-CC-Client': '1', ...(login ? { Cookie: login.cookie, 'X-CSRF-Token': login.csrf } : {}), ...extra }, ...(body !== undefined ? { body: typeof body === 'string' ? body : JSON.stringify(body) } : {}) });

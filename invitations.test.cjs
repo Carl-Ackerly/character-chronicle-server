@@ -1,0 +1,33 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {DatabaseSync}=require('node:sqlite');const {createAccountServer}=require('./account-server');const {createInvitations}=require('./account-invitations');const {chromium,launchOptions}=require('./tests/browser-runtime.cjs');
+const {createBackups,restore}=require('./account-backups');
+(async()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-invites-')),databasePath=path.join(dir,'test.db');let server=createAccountServer({databasePath,registrationMode:'open'});await new Promise(r=>server.listen(0,'127.0.0.1',r));let url='http://127.0.0.1:'+server.address().port,browser,db;
+ const request=(route,body,auth,extra={})=>fetch(url+route,{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json','X-CC-Client':'1',...(auth?{Cookie:auth.cookie,'X-CSRF-Token':auth.csrf}:{}),...extra},...(body===undefined?{}:{body:JSON.stringify(body)})});
+ async function register(username,invitationCode){const r=await request('/api/auth/register',{username,password:'Invite-test!',invitationCode});const body=await r.json();return {response:r,...body,cookie:r.headers.get('set-cookie')?.split(';')[0]};}
+ try{
+  const owner=await register('owner-test'),member=await register('existing-member');assert.equal(owner.response.status,201);
+  db=new DatabaseSync(databasePath);db.prepare("UPDATE accounts SET role='admin' WHERE id=?").run(owner.user.id);
+  const before=db.prepare('SELECT id,username,salt,password_hash,role FROM accounts ORDER BY id').all();
+  await new Promise(r=>server.close(r));server=createAccountServer({databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));url='http://127.0.0.1:'+server.address().port;
+  assert.deepEqual(db.prepare('SELECT id,username,salt,password_hash,role FROM accounts ORDER BY id').all(),before);
+  assert.equal((await request('/api/auth/me')).status,200);assert.equal((await (await request('/api/auth/me')).json()).registrationRequiresInvite,true);
+  assert.equal((await register('no-invite')).response.status,400);assert.equal((await register('bad-invite','0'.repeat(64))).response.status,400);
+  assert.equal((await request('/api/admin/invitations',{password:'Invite-test!'})).status,401);
+  assert.equal((await request('/api/admin/invitations',{password:'Invite-test!'},member)).status,403);
+  assert.equal((await request('/api/admin/invitations',{password:'Invite-test!'},owner,{'X-CSRF-Token':'bad'})).status,403);
+  assert.equal((await request('/api/admin/invitations',{password:'Wrong-test!'},owner)).status,401);
+  const response=await request('/api/admin/invitations',{password:'Invite-test!'},owner);assert.equal(response.status,201);const issued=await response.json();assert.equal(issued.code.length,64);
+  const joined=await register('joined-test',issued.code);assert.equal(joined.response.status,201);assert.equal(joined.user.role,'member');
+  const replay=await register('replay-test',issued.code);assert.equal(replay.response.status,400);assert(replay.message.includes('already used'));
+  const invites=createInvitations(db),expired=invites.issue(owner.user.id);db.exec('UPDATE account_invitations SET expires_at=0 WHERE used_at IS NULL');assert.equal((await register('expired-test',expired.code)).response.status,400);
+  const race=invites.issue(owner.user.id);const results=await Promise.all([register('race-one',race.code),register('race-two',race.code)]);assert.deepEqual(results.map(r=>r.response.status).sort(),[201,400]);
+  const retained=invites.issue(owner.user.id);assert.equal((await register('existing-member',retained.code)).response.status,400);assert.equal(invites.valid(retained.code),true);
+  browser=await chromium.launch(launchOptions);const ctx=await browser.newContext();await ctx.addCookies([{name:'cc_local_session',value:owner.cookie.split('=')[1],url,httpOnly:true,sameSite:'Strict'}]);await ctx.addInitScript(id=>sessionStorage.setItem('cc-account-context-v1',id),owner.user.id);const page=await ctx.newPage();await page.goto(url+'/#book');await page.getByRole('button',{name:'Account administration',exact:true}).click();await page.getByRole('button',{name:'Invite a player',exact:true}).click();await page.locator('dialog input[name=password]').fill('Invite-test!');await page.getByRole('button',{name:'Create invitation',exact:true}).click();await page.getByRole('heading',{name:'Invitation ready',exact:true}).waitFor();const code=await page.locator('dialog input[name=code]').inputValue();assert.equal(code.length,64);assert.equal(await page.locator('dialog input[name=password]').inputValue(),'');
+  const guest=await browser.newContext(),gp=await guest.newPage();await gp.goto(url);await gp.getByRole('button',{name:'Use on this device',exact:true}).click();await gp.locator('main').waitFor();await gp.getByRole('button',{name:'Home',exact:true}).click();await gp.getByRole('button',{name:'Create test account',exact:true}).click();await gp.getByLabel('Invite code',{exact:true}).fill(code);await gp.locator('dialog input[name=username]').fill('ui-invited');await gp.locator('dialog input[name=password]').fill('Invite-test!');await gp.locator('dialog input[name=confirmPassword]').fill('Invite-test!');await gp.locator('dialog button[type=submit]').click();await gp.getByRole('button',{name:'Account settings',exact:true}).waitFor();assert.equal(await gp.getByRole('button',{name:'Account administration',exact:true}).isVisible(),false);
+  const logs=fs.readFileSync(path.join(dir,'logs/security-audit.log'),'utf8');assert(!logs.includes(code));assert(!logs.includes(issued.code));assert(!logs.includes('Invite-test!'));assert(logs.includes('invitation-accepted'));
+  assert.notEqual(db.prepare('SELECT token_hash FROM account_invitations LIMIT 1').get().token_hash,issued.code);
+  invites.issue(owner.user.id);const snapshot=createBackups(db,databasePath).run(true);assert(snapshot);const restoredPath=path.join(dir,'restored.db');restore(snapshot,restoredPath);const restored=new DatabaseSync(restoredPath,{readOnly:true});assert.equal(restored.prepare('SELECT COUNT(*) AS count FROM account_invitations WHERE used_at IS NULL').get().count,0);restored.close();
+  console.log('PASS default invite-only registration, existing-account preservation, admin/CSRF/reauth checks, hash-only expiring invites, one-use race safety, failed-registration retention, normal member roles, admin UI, guest local access, invited signup, and private audit.');
+ }finally{if(browser)await browser.close();if(db)db.close();await new Promise(r=>server.close(r));}
+})().catch(e=>{console.error(e);process.exitCode=1});

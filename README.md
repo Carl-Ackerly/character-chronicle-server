@@ -179,3 +179,5 @@ Manual testing confirmed that a synthetic multiclass Fighter/Wizard character, l
 
 ## Current account-preview checkpoint
 The account preview includes automatic syncing and whole-book conflict recovery, administrator-assisted reset codes, signed-in passphrase changes, private security audit logs, and consistent daily backups with separate-file restore tests. These features belong to port 3002; the older port-3001 prototype still has its earlier limitations. See [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) for current status, setup/test instructions, remaining deployment work, and the decision to keep registration open. Run the regression suite with `npm test`. Private account records, databases, logs, and backups are excluded from Git. Public hosting is not enabled.
+
+Account-creation policy update: accounts now require administrator-issued one-use invitations; device-only use remains available without an account. Existing accounts keep their data and access. See [INVITATIONS.md](INVITATIONS.md). This supersedes the earlier open-registration decision.

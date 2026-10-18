@@ -3,13 +3,14 @@ const crypto = require('node:crypto');
 const { promisify } = require('node:util');
 const scrypt = promisify(crypto.scrypt);
 const { createRecovery } = require('./account-recovery');
+const { createInvitations } = require('./account-invitations');
 const validPassword = value => typeof value === 'string' && [...value].length >= 8 && [...value].length <= 128 && Buffer.byteLength(value, 'utf8') <= 512;
 const COST = { N: 131072, r: 8, p: 1, maxmem: 192 * 1024 * 1024 };
 const tokenHash = token => crypto.createHash('sha256').update(token).digest('hex');
 const random = () => crypto.randomBytes(32).toString('hex');
 const safeEqual = (a, b) => typeof a === 'string' && typeof b === 'string' && Buffer.byteLength(a) === Buffer.byteLength(b) && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
-function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000 } = {}) {
+function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000, registrationMode = 'invite' } = {}) {
   db.exec(`PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS accounts (
       id TEXT PRIMARY KEY, username TEXT NOT NULL UNIQUE,
@@ -23,6 +24,7 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000 } = {}) {
       key TEXT PRIMARY KEY, count INTEGER NOT NULL, expires_at INTEGER NOT NULL
     );`);
   const recovery = createRecovery(db);
+  const invitations = createInvitations(db), requiresInvite = registrationMode !== 'open';
   const cookieName = 'cc_local_session';
   let hashing = 0;
   function cookieToken(req) {
@@ -70,7 +72,7 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000 } = {}) {
     if (pathname.startsWith('/api/admin/')) return admin(req, res, pathname, input, reply);
     if (pathname === '/api/auth/me' && req.method === 'GET') {
       const user = session(req);
-      return reply(res, 200, user ? { user: { id: user.id, username: user.username, role: user.role || 'member' }, csrf: user.csrf } : { user: null });
+      return reply(res, 200, user ? { user: { id: user.id, username: user.username, role: user.role || 'member' }, csrf: user.csrf, registrationRequiresInvite: requiresInvite } : { user: null, registrationRequiresInvite: requiresInvite });
     }
     if (req.method !== 'POST') return reply(res, 405, { message: 'Method not allowed.' });
     if (pathname === '/api/auth/logout') {
@@ -87,6 +89,8 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000 } = {}) {
     if (!/^[a-z0-9][a-z0-9._-]{2,31}$/.test(username) || typeof password !== 'string' || [...password].length < 8 || [...password].length > 128 || Buffer.byteLength(password, 'utf8') > 512) return reply(res, 400, { message: 'Use a 3–32 character username and a 8–128 character passphrase.' });
     const ip = req.socket.remoteAddress || 'local';
     if (limited('ip:' + ip, 30) || limited('name:' + username, 10)) { recovery.audit('anonymous', null, 'authentication-throttled', 'denied');res.setHeader('Retry-After', '900');return reply(res, 429, { message: 'Too many attempts. Try again in 15 minutes.' }); }
+    const invitationCode = typeof input.invitationCode === 'string' ? input.invitationCode.trim().toLowerCase() : '';
+    if (pathname === '/api/auth/register' && requiresInvite && !invitations.valid(invitationCode)) { recovery.audit('anonymous', null, 'registration-invite', 'denied');return reply(res, 400, { message: invitationCode ? 'This invitation is invalid, expired, or already used. Ask the administrator for a new code.' : 'An invitation is required to create an account. Ask the administrator for a code, or use this device without an account.' }); }
     const existing = db.prepare('SELECT id, username, salt, password_hash, role, credential_version FROM accounts WHERE username = ?').get(username);
     if (pathname === '/api/auth/login') {
       // Unknown names still perform the same expensive password calculation.
@@ -99,8 +103,14 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000 } = {}) {
     const salt = crypto.randomBytes(16).toString('hex'), hash = await derive(password, salt);
     if (existing) return reply(res, 400, { message: 'Unable to create this account. Try another username or sign in.' });
     const user = { id: crypto.randomUUID(), username, role: 'member' };
-    try { db.prepare('INSERT INTO accounts (id, username, salt, password_hash, created_at) VALUES (?, ?, ?, ?, ?)').run(user.id, username, salt, hash, new Date().toISOString()); }
-    catch (error) { if (String(error.code).includes('CONSTRAINT')) return reply(res, 400, { message: 'Unable to create this account. Try another username or sign in.' });throw error; }
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      if (requiresInvite && !invitations.valid(invitationCode)) { db.exec('ROLLBACK');return reply(res,400,{message:'Invite code is expired or already used.'}); }
+      db.prepare('INSERT INTO accounts (id, username, salt, password_hash, created_at) VALUES (?, ?, ?, ?, ?)').run(user.id, username, salt, hash, new Date().toISOString());
+      if (requiresInvite && !invitations.consume(invitationCode, user.id)) throw Error('Invitation could not be claimed.');
+      if (requiresInvite) recovery.audit(user.id, user.id, 'invitation-accepted', 'success');
+      db.exec('COMMIT');
+    } catch (error) { db.exec('ROLLBACK');if (String(error.code).includes('CONSTRAINT')) return reply(res, 400, { message: 'Unable to create this account. Try another username or sign in.' });throw error; }
     recovery.audit(user.id, user.id, 'account-created', 'success');
     return reply(res, 201, startSession(req, res, user));
   }
@@ -153,14 +163,16 @@ function createAuth(db, { sessionTtl = 8 * 60 * 60 * 1000 } = {}) {
       return reply(res, 200, { accounts });
     }
     if (pathname === '/api/admin/audit' && req.method === 'GET') return reply(res, 200, { events: db.prepare('SELECT actor_id, target_account_id, action, outcome, created_at FROM security_audit ORDER BY id DESC LIMIT 50').all() });
-    if (pathname !== '/api/admin/recovery' || req.method !== 'POST') return reply(res, 404, { message: 'Not found.' });
+    const isInvite = pathname === '/api/admin/invitations';
+    if ((!isInvite && pathname !== '/api/admin/recovery') || req.method !== 'POST') return reply(res, 404, { message: 'Not found.' });
     if (!safeEqual(req.headers['x-csrf-token'], user.csrf)) return reply(res, 403, { message: 'Invalid session request.' });
-    if (!input || typeof input !== 'object' || Array.isArray(input) || input.identityConfirmed !== true || !validPassword(input.password) || typeof input.accountId !== 'string') return reply(res, 400, { message: 'Verify the person’s identity and enter your administrator passphrase.' });
+    if (!input || typeof input !== 'object' || Array.isArray(input) || !validPassword(input.password) || (!isInvite && (input.identityConfirmed !== true || typeof input.accountId !== 'string'))) return reply(res, 400, { message: isInvite ? 'Enter your administrator passphrase.' : 'Verify the person’s identity and enter your administrator passphrase.' });
     if (limited('admin-reset:' + user.id, 5)) { res.setHeader('Retry-After', '900');return reply(res, 429, { message: 'Too many administrator reset attempts. Try again in 15 minutes.' }); }
     const existing = db.prepare('SELECT salt, password_hash, credential_version FROM accounts WHERE id = ?').get(user.id);
     const hash = await derive(input.password, existing.salt);
     const fresh = session(req);
     if (!fresh || fresh.role !== 'admin' || fresh.credentialVersion !== existing.credential_version || !safeEqual(hash, existing.password_hash)) { recovery.audit(user.id, null, 'admin-reauth', 'denied');return reply(res, 401, { message: 'Administrator verification failed. Sign in again if needed.' }); }
+    if (isInvite) { const invite = invitations.issue(user.id);recovery.audit(user.id, null, 'invitation-issued', 'success');return reply(res,201,{...invite,message:'Share privately with one person. This invitation expires in seven days and creates one ordinary player account.'}); }
     const target = db.prepare('SELECT id, role FROM accounts WHERE id = ?').get(input.accountId);
     if (!target) return reply(res, 404, { message: 'Account not found.' });
     if (target.role === 'admin') return reply(res, 403, { message: 'Administrator recovery requires the local owner command.' });

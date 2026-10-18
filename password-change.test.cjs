@@ -4,7 +4,7 @@ const {createAccountServer}=require('./account-server');
 const {createRecovery}=require('./account-recovery');
 const {chromium,launchOptions}=require('./tests/browser-runtime.cjs');
 (async()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-password-')),databasePath=path.join(dir,'test.db'),server=createAccountServer({databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-password-')),databasePath=path.join(dir,'test.db'),server=createAccountServer({registrationMode:'open',databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
  try {
   const url='http://127.0.0.1:'+server.address().port,OLD='Original-test!',NEW='New-123!';
   const call=(route,body,auth,headers={},method='POST')=>fetch(url+route,{method,headers:{'Content-Type':'application/json','X-CC-Client':'1',...(auth?{Cookie:auth.cookie,'X-CSRF-Token':auth.csrf}:{}),...headers},...(body!==undefined?{body:JSON.stringify(body)}:{})});

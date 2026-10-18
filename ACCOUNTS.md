@@ -55,3 +55,5 @@ Reference guidance: [OWASP Password Storage](https://cheatsheetseries.owasp.org/
 ## Remaining release work
 
 See [ROADMAP.md](ROADMAP.md) for completed checkpoints, ordered remaining tasks, acceptance checks, and the next-session plan. The create-account form now requires matching passphrases and has a Show passphrase toggle. Administrator-issued recovery codes are now implemented locally; see RECOVERY.md.
+
+Current policy: new accounts require an invite code. Ordinary local use needs no account. See INVITATIONS.md for administrator issuance, expiry, and the fresh-install bootstrap procedure.

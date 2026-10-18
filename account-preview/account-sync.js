@@ -148,6 +148,10 @@
     const dialog = document.createElement('dialog');
     dialog.innerHTML = '<form><h2></h2><p>Local test only. Use a test passphrase, not one from another service. For a forgotten passphrase, contact the administrator for a one-use reset code.</p><label class="field"><span>Username</span><input name="username" autocomplete="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9][A-Za-z0-9._-]{2,31}" required></label><label class="field"><span>Passphrase (8–128 characters)</span><input name="password" type="password" minlength="8" maxlength="128" required></label><p class="auth-message" role="status"></p><div class="buttons"><button type="submit"></button><button type="button" class="cancel">Cancel</button></div></form>';
     const form = dialog.querySelector('form'), submit = form.querySelector('[type=submit]'), message = form.querySelector('.auth-message');
+    if (register && session?.registrationRequiresInvite !== false) {
+      dialog.querySelector('p').textContent = 'Accounts are for invited players. Enter the code shared by the administrator, then choose your own username and passphrase. Anyone can use this device without an account.';
+      form.querySelector('label').insertAdjacentHTML('beforebegin','<label class="field"><span>Invite code</span><input name="invitationCode" autocomplete="off" minlength="64" maxlength="64" pattern="[a-fA-F0-9]{64}" required></label>');
+    }
     dialog.querySelector('h2').textContent = register ? 'Create a test account' : 'Sign in';submit.textContent = register ? 'Create account' : 'Sign in';
     form.elements.password.autocomplete = register ? 'new-password' : 'current-password';
     form.elements.password.closest('label').insertAdjacentHTML('afterend', (register ? '<label class="field"><span>Confirm passphrase</span><input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></label>' : '') + '<label style="display:flex;gap:8px;align-items:center;margin:12px 0"><input name="showPassword" type="checkbox">Show passphrase</label>');
@@ -160,7 +164,7 @@
     form.onsubmit = async event => {
       event.preventDefault();if (register && form.elements.password.value !== form.elements.confirmPassword.value) { message.textContent = 'Passphrases do not match. Please check both fields.';return; }if (busy) { message.textContent = 'Wait for the current save to finish.';return; }submit.disabled = true;
       try {
-        const result = await api('/api/auth/' + (register ? 'register' : 'login'), { method: 'POST', body: JSON.stringify({ username: form.elements.username.value, password: form.elements.password.value }) });
+        const result = await api('/api/auth/' + (register ? 'register' : 'login'), { method: 'POST', body: JSON.stringify({ username: form.elements.username.value, password: form.elements.password.value, ...(form.elements.invitationCode ? {invitationCode:form.elements.invitationCode.value} : {}) }) });
         form.elements.password.value = '';if (register) form.elements.confirmPassword.value = '';session = result;changeContext(result.user.id, true);
       } catch (error) { message.textContent = error.message;submit.disabled = false; }
     };
@@ -234,11 +238,32 @@
     };
     document.body.append(dialog);dialog.showModal();
   }
+  function showInvite() {
+    if (!active() || session.user.role !== 'admin') return;
+    const dialog = document.createElement('dialog');
+    dialog.innerHTML = '<form><h2>Invite a player</h2><p class="invite-intro">Create a private code for one person. It expires after seven days. They choose their own passphrase and receive ordinary player access.</p><label class="field"><span>Your administrator passphrase</span><input name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></label><label class="field" data-invite-output hidden><span>One-use invite code</span><input name="code" readonly autocomplete="off"></label><p class="invite-message" role="status"></p><div class="buttons"><button type="submit">Create invitation</button><button type="button" class="copy-invite" hidden>Copy invitation</button><button type="button" class="cancel">Cancel</button></div></form>';
+    const form = dialog.querySelector('form'), submit = form.querySelector('[type=submit]'), copy = form.querySelector('.copy-invite'), message = form.querySelector('.invite-message');let expires;
+    dialog.querySelector('.cancel').onclick = () => dialog.close();dialog.addEventListener('close',()=>{clearTimeout(expires);form.reset();dialog.remove();});
+    copy.onclick = async () => { try { await navigator.clipboard.writeText(form.elements.code.value);message.textContent = 'Invitation copied. Send it privately to the person you want to invite.'; } catch { message.textContent = 'Select the invite code and copy it manually.'; } };
+    form.onsubmit = async event => {
+      event.preventDefault();if (submit.disabled || submit.hidden) return;submit.disabled = true;
+      try {
+        const result = await api('/api/admin/invitations',{method:'POST',body:JSON.stringify({password:form.elements.password.value})});
+        form.elements.code.value = result.code;form.elements.password.closest('label').hidden = true;form.elements.password.disabled = true;form.querySelector('[data-invite-output]').hidden = false;submit.hidden = true;copy.hidden = false;
+        dialog.querySelector('h2').textContent = 'Invitation ready';dialog.querySelector('.cancel').textContent = 'Done';
+        message.textContent = 'Created successfully. Share this code privately. Expires ' + new Date(result.expiresAt).toLocaleString() + '.';
+        expires = setTimeout(()=>{form.elements.code.value='';form.querySelector('[data-invite-output]').hidden=true;copy.hidden=true;message.textContent='Invitation expired. Create a new invitation if needed.';},Math.max(0,result.expiresAt-Date.now()));
+      } catch(error) { message.textContent = error.message; }
+      finally { form.elements.password.value = '';submit.disabled = false; }
+    };
+    document.body.append(dialog);dialog.showModal();
+  }
   async function showAdmin() {
     if (!active() || session.user.role !== 'admin') return;
     const dialog = document.createElement('dialog');
     dialog.innerHTML = '<form><h2>Account administration</h2><p class="admin-intro">Issue recovery codes only after verifying the person through a trusted private channel. Codes expire after 15 minutes. Creating a new code invalidates any earlier unused code.</p><label class="field"><span>Account to recover</span><select name="accountId" required><option value="">Select an account</option></select></label><label class="field"><span>Your administrator passphrase</span><input name="adminPassword" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></label><label style="display:flex;gap:8px;align-items:center"><input name="identityConfirmed" type="checkbox" required>I verified this person’s identity</label><p class="admin-message" role="status"></p><label class="field" hidden data-reset-output><span>Private one-use reset code</span><input name="issuedCode" readonly autocomplete="off"></label><div class="buttons"><button type="submit">Generate reset code</button><button type="button" class="copy-code" hidden>Copy reset code</button><button type="button" class="another-reset" hidden>Start another recovery</button><button type="button" class="show-audit">Recent recovery activity</button><button type="button" class="cancel">Close</button></div></form><ul class="audit-list"></ul>';
     const form = dialog.querySelector('form'), message = dialog.querySelector('.admin-message'), output = dialog.querySelector('[data-reset-output]'), copy = dialog.querySelector('.copy-code'), submit = form.querySelector('[type=submit]');
+    const inviteButton = document.createElement('button');inviteButton.type = 'button';inviteButton.textContent = 'Invite a player';inviteButton.onclick = () => { dialog.close();showInvite(); };dialog.querySelector('.buttons').prepend(inviteButton);
     let accounts = [], timer;
     const another = dialog.querySelector('.another-reset');
     const recoveryFields = [form.elements.accountId, form.elements.adminPassword, form.elements.identityConfirmed];

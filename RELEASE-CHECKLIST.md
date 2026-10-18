@@ -16,7 +16,7 @@ Synthetic tests cover the major account, recovery, backup/restore, sync, and UI 
 
 ## Decisions
 
-- Keep ordinary self-service registration open; invitations are not required. Add appropriate signup-abuse defenses before internet exposure.
+- Account creation requires a private, one-use invitation from the administrator. Anyone can use device-only mode without an account. This supersedes the earlier open-registration decision; see INVITATIONS.md.
 - Preserve the chosen real owner account/database through production migration; do not publish its username record, credentials, or private data.
 - Keep the existing GitHub Pages app available. This checkpoint is a separate feature branch, not a deployment or main-branch merge.
 - Do not expose a public address until the dedicated mini PC is ready. VPN experimentation can be considered separately.

@@ -3,7 +3,7 @@ const {createAccountServer}=require('./account-server');
 const {chromium,launchOptions}=require('./tests/browser-runtime.cjs');
 const {DatabaseSync}=require('node:sqlite');
 (async()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-sync-')),server=createAccountServer({databasePath:path.join(dir,'test.db')});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-sync-')),server=createAccountServer({registrationMode:'open',databasePath:path.join(dir,'test.db')});await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
  try {
   const url='http://127.0.0.1:'+server.address().port;
   const call=(route,method,body,auth)=>fetch(url+route,{method,headers:{'Content-Type':'application/json','X-CC-Client':'1',...(auth?{Cookie:auth.cookie,'X-CSRF-Token':auth.csrf}:{})},...(body?{body:JSON.stringify(body)}:{})});

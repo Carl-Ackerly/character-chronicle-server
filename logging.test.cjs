@@ -9,7 +9,7 @@ const { createRecovery } = require('./account-recovery');
 const { createAuditFile } = require('./account-audit-file');
 (async () => {
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-audit-')),databasePath=path.join(dir,'accounts.db'),filename=path.join(dir,'logs','security-audit.log');
-  const server=createAccountServer({databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));const url='http://127.0.0.1:'+server.address().port;
+  const server=createAccountServer({registrationMode:'open',databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));const url='http://127.0.0.1:'+server.address().port;
   const password='Logging test passphrase!';
   async function call(route,body,login){const r=await fetch(url+route,{method:'POST',headers:{'Content-Type':'application/json','X-CC-Client':'1',...(login?{Cookie:login.cookie,'X-CSRF-Token':login.csrf}:{})},body:JSON.stringify(body)});return r;}
   async function enroll(username){const r=await call('/api/auth/register',{username,password});assert.equal(r.status,201);return {...await r.json(),cookie:r.headers.get('set-cookie').split(';')[0]};}

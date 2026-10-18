@@ -6,7 +6,7 @@ const {createBackups,restore,verify}=require('./account-backups');
 const {createRecovery}=require('./account-recovery');
 (async()=>{
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cc-backups-')),databasePath=path.join(dir,'source.db');
-  let server=createAccountServer({databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+  let server=createAccountServer({registrationMode:'open',databasePath});await new Promise(r=>server.listen(0,'127.0.0.1',r));
   let restoredServer;
   try {
     const url='http://127.0.0.1:'+server.address().port;
@@ -34,7 +34,7 @@ const {createRecovery}=require('./account-recovery');
     const blocked=path.join(dir,'not-a-directory');fs.writeFileSync(blocked,'file');const warn=console.error;console.error=()=>{};
     try { assert.equal(createBackups(db,databasePath,{directory:blocked}).run(true),false); } finally { console.error=warn; }
     assert.deepEqual(db.prepare('SELECT * FROM account_books').all(),originalBook);db.close();
-    restoredServer=createAccountServer({databasePath:target});await new Promise(r=>restoredServer.listen(0,'127.0.0.1',r));
+    restoredServer=createAccountServer({registrationMode:'open',databasePath:target});await new Promise(r=>restoredServer.listen(0,'127.0.0.1',r));
     const restoreURL='http://127.0.0.1:'+restoredServer.address().port;
     const oldSession=await fetch(restoreURL+'/api/book',{headers:{Cookie:cookie}});assert.equal(oldSession.status,401);
     const login=await fetch(restoreURL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json','X-CC-Client':'1'},body:JSON.stringify({username:'backup-owner',password:'Backup-test-only!'})});assert.equal(login.status,200);assert.equal((await login.json()).user.role,'admin');

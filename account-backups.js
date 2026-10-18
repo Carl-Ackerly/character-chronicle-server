@@ -51,6 +51,7 @@ function restore(source, destination) {
     db.exec('BEGIN IMMEDIATE');
     db.exec('DELETE FROM login_sessions');
     db.prepare('UPDATE password_resets SET used_at = ? WHERE used_at IS NULL').run(Date.now());
+    if (db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='account_invitations'").get()) db.prepare('UPDATE account_invitations SET used_at = ? WHERE used_at IS NULL').run(Date.now());
     db.prepare('INSERT INTO security_audit (actor_id, target_account_id, action, outcome, created_at) VALUES (?, NULL, ?, ?, ?)').run('local-owner','database-restored','success',new Date().toISOString());
     db.exec('COMMIT');
   } catch(error) { try { db.exec('ROLLBACK'); } catch {} throw error; }
