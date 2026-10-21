@@ -109,6 +109,7 @@ function createAccountServer(options = {}) {
       if (!['GET', 'HEAD'].includes(req.method)) return reply(res, 405, { message: 'Method not allowed.' });
       const name = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
       if (!/^[a-zA-Z0-9._-]+$/.test(name) || !Object.hasOwn(types, path.extname(name))) return reply(res, 404, { message: 'Page not found.' });
+      if (name === 'sw.js') res.setHeader('Service-Worker-Allowed', '/');
       const contents = await fs.promises.readFile(path.join(publicPath, name)).catch(() => null);
       if (!contents) return reply(res, 404, { message: 'Page not found.' });
       res.writeHead(200, { 'Content-Type': types[path.extname(name)] });res.end(req.method === 'HEAD' ? undefined : contents);

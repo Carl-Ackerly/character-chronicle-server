@@ -33,7 +33,7 @@ npm start
 
 Open http://127.0.0.1:3002/. The familiar `node account-server.js` command also works. The Node server remains bound to loopback. The current owner installation uses Tailscale Serve for private HTTPS access; it is not a public deployment. See [private access setup](docs/PRIVATE-ACCESS.md). A fresh clone has no private hostname configuration.
 
-- Anyone can choose **Use on this device** without an account. Those characters stay in that browser.
+- Anyone can choose **Use on this device** without an account. After the initial online download, the app can reopen offline and those characters stay in that browser. See [offline setup and limitations](docs/OFFLINE.md).
 - New accounts require an administrator-issued, one-use invitation. Members sign in to access their own account books.
 - Account changes save locally first, then sync when connected. Clean copies check for updates automatically; conflicting books are preserved for review.
 - Administrator-assisted recovery and signed-in passphrase changes preserve character books and revoke affected sessions.

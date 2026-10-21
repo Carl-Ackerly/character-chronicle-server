@@ -251,5 +251,5 @@ function about(){openModal(`<div class="modal-title"><h2>About this prototype</h
  window.addEventListener('storage',e=>{if(e.key!==KEY)return;try{const incoming=JSON.parse(e.newValue);if(incoming?.version===1){db=incoming;history=[];if(view==='dashboard')dashboard();else if(view==='library')library();announce('Loaded changes from another tab')}}catch(e){}});
  if(!storageOK){$('saveState').textContent='Storage unavailable — saves not loaded';$('saveState').classList.add('failed')}
  library();
- // Test preview intentionally has no service worker.
+ // Offline shell registration is handled separately by offline.js.
 })();

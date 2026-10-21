@@ -14,7 +14,7 @@
   panel.querySelector('strong').remove();
   const homeNote = document.createElement('p');
   homeNote.className = 'home-note';
-  homeNote.textContent = 'No account required for local play. Local characters stay in this browser. Sign in to save an account book on this server and access it from another connected device.';
+  homeNote.textContent = 'No account required for local play. Local characters stay in this browser and can reopen offline after the initial app download. Sign in to save an account book on this server and access it from another connected device.';
   panel.append(homeNote);
   const bookBar = document.createElement('nav');bookBar.className = 'chronicle-book-bar';bookBar.setAttribute('aria-label', 'App navigation');
   bookBar.innerHTML = '<button type="button" id="chronicleHome">Home</button>';
