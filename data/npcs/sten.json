@@ -1,0 +1,77 @@
+{
+  "id": "sten-young-firbolg-warrior",
+  "name": "Sten",
+  "type": "NPC",
+  "subtitle": "Young Firbolg Warrior",
+  "size": "Medium",
+  "creatureType": "Giant",
+  "alignment": "Neutral Good",
+  "age": 12,
+  "armorClass": 13,
+  "armor": "Hide armor",
+  "hitPoints": {
+    "maximum": 32,
+    "formula": "5d8+10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "challengeRating": 1,
+  "xp": 200,
+  "skills": {
+    "Athletics": 4,
+    "Survival": 3,
+    "Perception": 3
+  },
+  "savingThrows": {
+    "Strength": 4,
+    "Constitution": 4
+  },
+  "languages": [
+    "Common",
+    "Giant",
+    "Elvish"
+  ],
+  "attacks": [
+    {
+      "name": "Young Warrior's Maul",
+      "toHit": 4,
+      "damage": "2d6+2",
+      "damageType": "bludgeoning",
+      "kind": "melee"
+    },
+    {
+      "name": "Handaxe",
+      "toHit": 4,
+      "damage": "1d6+2",
+      "damageType": "slashing",
+      "range": "20/60 ft."
+    }
+  ],
+  "features": [
+    {
+      "name": "Hidden Step",
+      "recharge": "1/short rest",
+      "activation": "bonus action",
+      "description": "Become invisible until the start of his next turn, until he attacks, or until he forces a saving throw."
+    },
+    {
+      "name": "Defiant Courage",
+      "recharge": "1/day",
+      "description": "When reduced below half HP, gains 8 temporary HP."
+    },
+    {
+      "name": "Reckless Strike",
+      "description": "Gains advantage on his next melee attack, but attacks against him have advantage until his next turn."
+    }
+  ],
+  "appearance": "6 feet tall, broad-shouldered, braided brown hair, blue tribal tattoos, scar across cheek.",
+  "temperament": "Brave, stubborn, fiercely protective of younger Firbolg children.",
+  "background": "Oldest of 14 captive younglings. Repeatedly challenged wereboar guards and suffered beatings.",
+  "secret": {
+    "description": "Secretly loosened a wooden stake in the children's prison pen.",
+    "discovery": "DC 12 Perception"
+  },
+  "roleplaying": "Refuses to flee until every child is safe.",
+  "quote": "I am a warrior of the Elderwood! I will not leave my people behind!"
+}
